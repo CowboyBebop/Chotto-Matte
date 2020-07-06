@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { ResultStorage } = require("firebase-functions/lib/providers/testLab");
 
 admin.initializeApp();
 
@@ -23,4 +24,23 @@ exports.getTuturu = functions.https.onRequest((req, res) => {
       return res.json(tuturus);
     })
     .catch((err) => console.error(err));
+});
+
+exports.createTuturu = functions.https.onRequest((req, res) => {
+  const newTuturu = {
+    body: req.body.body,
+    userHandle: req.body.userHandle,
+    createdAt: admin.firestore.Timestamp.fromDate(new Date())
+  };
+
+  admin.firestore()
+    .collection('tuturu')
+    .add(newTuturu)
+    .then(doc => {
+      res.json({message: `document ${doc.id} created successfully`})
+    })
+    .catch(err => {
+      res.status(500).json({error: 'something went wrong'})
+      console.error(err);
+    })
 });
