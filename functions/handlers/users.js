@@ -46,7 +46,7 @@ exports.signup = (req, res) => {
         userHandle: newUser.userHandle,
         email: newUser.email,
         createdAt: new Date().toISOString(),
-        profileImage: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/0/${defaultpfp}?alt=media`,
+        profileImage: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultpfp}?alt=media`,
         userId,
       };
       return db.doc(`/users/${newUser.userHandle}`).set(userCredentials);
@@ -96,34 +96,35 @@ exports.login = (req, res) => {
 };
 
 exports.uploadProfileImage = (req, res) => {
-  const BusBoi = require("busboy");
+  const BusBoy = require("busboy");
   const path = require("path");
   const os = require("os");
   const fs = require("fs");
 
-  const busboi = new BusBoi({ headers: req.headers });
+  const busboy = new BusBoy({ headers: req.headers });
 
   let imageFileName;
-  let imageToBeUploaded;
+  let imageToBeUploaded = {};
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
     console.log(fieldname + " : " + filename + " : " + mimetype);
 
     //my.image.png
-    const splitFilename = filename.split(".");
-    const imageExtension = splitFilename[splitFilename.length - 1];
+    const imageExtension = filename.split(".")[filename.split(".").length - 1];
     //12321505124050.png
-    imageFileName = `${Math.round(
-      Math.random() * 100000000000
-    )}.${imageExtension}`;
+    imageFileName = `${Math.round(Math.random() * 1000000000000).toString()}.${imageExtension}`;
 
     const filepath = path.join(os.tmpdir(), imageFileName);
+
+    console.log(typeof(filepath));
 
     imageToBeUploaded = {filepath, mimetype};
     file.pipe(fs.createWriteStream(filepath));
   });
-  busboi.on('finish',() => {
-    admin.storage().bucket().upload(imageToBeUploaded.filename, {
+
+
+  busboy.on('finish',() => {
+    admin.storage().bucket().upload(imageToBeUploaded.filepath, {
       resumable: false,
       metadata : {
         metadata : {
@@ -132,8 +133,8 @@ exports.uploadProfileImage = (req, res) => {
       }
     })
     .then( () => {
-      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/0/${imageFileName}?alt=media`
-      return db.doc(`/users/${req.user.userHandle}`).update({imageUrl});
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
+      return db.doc(`/users/${req.user.userHandle}`).update({profileImage: imageUrl});
     })
     .then( () => {
       return res.json({message: `image uploaded successfuly`})
@@ -142,5 +143,8 @@ exports.uploadProfileImage = (req, res) => {
       console.error(err);
       return res.status(500).json({error:err.code});
     })
-  })
+  });
+
+
+  busboy.end(req.rawBody);
 };
