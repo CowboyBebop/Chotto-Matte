@@ -1,11 +1,19 @@
-const {admin, db } = require(`../util/admin`);
+const { admin, db } = require(`../util/admin`);
 
 const config = require("../util/config");
 
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
-const { validateSignupData, validateLoginData } = require(`../util/validators`);
+const {
+  validateSignupData,
+  validateLoginData,
+  reduceUserDetails,
+} = require(`../util/validators`);
+const {
+  UserRecordMetadata,
+  user,
+} = require("firebase-functions/lib/providers/auth");
 
 exports.signup = (req, res) => {
   const newUser = {
@@ -19,7 +27,7 @@ exports.signup = (req, res) => {
 
   if (!valid) return res.status(400).json(errors);
 
-  const defaultpfp = 'default-pfp-img.png';
+  const defaultpfp = "default-pfp-img.png";
 
   //TODO: validate data
   let token, userId;
@@ -95,6 +103,20 @@ exports.login = (req, res) => {
     });
 };
 
+exports.addUserDetails = (req, res) => {
+  let userDetails = reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.userHandle}`)
+    .update(userDetails)
+    .then(() => {
+      return res.json({ message: "Details added successfully" });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
 exports.uploadProfileImage = (req, res) => {
   const BusBoy = require("busboy");
   const path = require("path");
@@ -107,46 +129,78 @@ exports.uploadProfileImage = (req, res) => {
   let imageToBeUploaded = {};
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-    
-    if (mimetype !== 'image/png' && mimetype !== 'image/jpeg') {
-      return res.status(400).json({error: 'Wrong file type submitted'});
-    } 
+    if (mimetype !== "image/png" && mimetype !== "image/jpeg") {
+      return res.status(400).json({ error: "Wrong file type submitted" });
+    }
     //my.image.png
     const imageExtension = filename.split(".")[filename.split(".").length - 1];
     //12321505124050.png
-    imageFileName = `${Math.round(Math.random() * 1000000000000).toString()}.${imageExtension}`;
+    imageFileName = `${Math.round(
+      Math.random() * 1000000000000
+    ).toString()}.${imageExtension}`;
 
     const filepath = path.join(os.tmpdir(), imageFileName);
 
-    console.log(typeof(filepath));
+    console.log(typeof filepath);
 
-    imageToBeUploaded = {filepath, mimetype};
+    imageToBeUploaded = { filepath, mimetype };
     file.pipe(fs.createWriteStream(filepath));
   });
 
-
-  busboy.on('finish',() => {
-    admin.storage().bucket().upload(imageToBeUploaded.filepath, {
-      resumable: false,
-      metadata : {
-        metadata : {
-          contentType: imageToBeUploaded.mimetype
-        }
-      }
-    })
-    .then( () => {
-      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
-      return db.doc(`/users/${req.user.userHandle}`).update({profileImage: imageUrl});
-    })
-    .then( () => {
-      return res.json({message: `image uploaded successfuly`})
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json({error:err.code});
-    })
+  busboy.on("finish", () => {
+    admin
+      .storage()
+      .bucket()
+      .upload(imageToBeUploaded.filepath, {
+        resumable: false,
+        metadata: {
+          metadata: {
+            contentType: imageToBeUploaded.mimetype,
+          },
+        },
+      })
+      .then(() => {
+        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
+        return db
+          .doc(`/users/${req.user.userHandle}`)
+          .update({ profileImage: imageUrl });
+      })
+      .then(() => {
+        return res.json({ message: `image uploaded successfuly` });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+      });
   });
 
-
   busboy.end(req.rawBody);
+};
+
+//Get authenticated user
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {};
+
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+
+        return db
+          .collection("likes")
+          .where("userHandle", "==", req.user.userHandle)
+          .get();
+      }
+    })
+    .then((data) => {
+      userData.likes = [];
+      data.forEach((doc) => {
+        userData.likes.push(doc.data());
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
 };
