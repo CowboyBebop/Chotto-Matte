@@ -1,11 +1,23 @@
 let db = {
-    tuturus: [
-        {
-            userHandle: 'user',
-            body: "tuturu body",
-            createdAt: "2020-07-10T11:08:07.779Z",
-            likeCount: 5,
-            commentCount: 2
-        }
-    ]
-}
+  users: [
+    {
+      userId: "dh23ggj5h32g543j5gf43",
+      email: "user@email.com",
+      handle: "user",
+      createdAt: "2019-03-15T10:59:52.798Z",
+      imageUrl: "image/dsfsdkfghskdfgs/dgfdhfgdh",
+      bio: "Hello, my name is user, nice to meet you",
+      website: "https://user.com",
+      location: "Lonodn, UK",
+    },
+  ],
+  tuturus: [
+    {
+      userHandle: "user",
+      body: "This is a sample scream",
+      createdAt: "2019-03-15T10:59:52.798Z",
+      likeCount: 5,
+      commentCount: 3,
+    },
+  ],
+};
