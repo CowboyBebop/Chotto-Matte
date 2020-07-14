@@ -177,11 +177,11 @@ exports.uploadProfileImage = (req, res) => {
   busboy.end(req.rawBody);
 };
 
-//Get authenticated user
-exports.getAuthenticatedUser = (req, res) => {
+//Get authenticated user data
+exports.getAuthenticatedUserData = (req, res) => {
   let userData = {};
 
-  db.doc(`/users/${req.user.handle}`)
+  db.doc(`/users/${req.user.userHandle}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
@@ -198,6 +198,7 @@ exports.getAuthenticatedUser = (req, res) => {
       data.forEach((doc) => {
         userData.likes.push(doc.data());
       });
+      return res.json(userData);
     })
     .catch((err) => {
       console.error(err);
