@@ -198,7 +198,7 @@ exports.getAuthenticatedUserData = (req, res) => {
       data.forEach((doc) => {
         userData.likes.push(doc.data());
       });
-      return res.json(userDatar);
+      return res.json(userData);
     })
     .catch((err) => {
       console.error(err);
