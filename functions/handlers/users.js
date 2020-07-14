@@ -10,6 +10,10 @@ const {
   validateLoginData,
   reduceUserDetails,
 } = require(`../util/validators`);
+const {
+  UserRecordMetadata,
+  user,
+} = require("firebase-functions/lib/providers/auth");
 
 exports.signup = (req, res) => {
   const newUser = {
@@ -171,4 +175,32 @@ exports.uploadProfileImage = (req, res) => {
   });
 
   busboy.end(req.rawBody);
+};
+
+//Get authenticated user
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {};
+
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+
+        return db
+          .collection("likes")
+          .where("userHandle", "==", req.user.userHandle)
+          .get();
+      }
+    })
+    .then((data) => {
+      userData.likes = [];
+      data.forEach((doc) => {
+        userData.likes.push(doc.data());
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
 };

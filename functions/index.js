@@ -11,6 +11,7 @@ const {
   login,
   uploadProfileImage,
   addUserDetails,
+  getAuthenticatedUser,
 } = require(`./handlers/users`);
 const fbAuth = require("./util/fbAuth");
 
@@ -23,5 +24,6 @@ app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", FBAuth, uploadProfileImage);
 app.post("/user", FBAuth, addUserDetails);
+app.get("/user", FBAuth, getAuthenticatedUser);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
