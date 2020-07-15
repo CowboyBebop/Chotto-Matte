@@ -172,7 +172,7 @@ exports.unlikeTuturuPost = async (req, res) => {
         .status(400)
         .json({ error: "There's no like for this Tuturu post" });
     } else {
-      await db.doc(`/likes/${likeData.docs[0].data().id}`).delete();
+      await db.doc(`/likes/${likeData.docs[0].id}`).delete();
 
       tuturuData.likeCount--;
       await tuturuDocument.update({ likeCount: tuturuData.likeCount });
