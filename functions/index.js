@@ -5,7 +5,15 @@ const app = require("express")();
 
 const FBAuth = require("./util/fbAuth");
 
-const { getAllTuturus, postOneTuturu } = require(`./handlers/tuturus`);
+const {
+  getAllTuturus,
+  postOneTuturu,
+  getTuturuById,
+  postCommentOnTuturu,
+  likeTuturuPost,
+  unlikeTuturuPost,
+} = require(`./handlers/tuturus`);
+
 const {
   signup,
   login,
@@ -17,7 +25,12 @@ const fbAuth = require("./util/fbAuth");
 
 // Tuturu routes
 app.get("/tuturus", FBAuth, getAllTuturus);
+app.get("/tuturu/:tuturuId", getTuturuById);
 app.post("/tuturu", FBAuth, postOneTuturu);
+app.post("/tuturu/:tuturuId/comment", FBAuth, postCommentOnTuturu);
+app.post("/tuturu/:tuturuId/like", FBAuth, likeTuturuPost);
+app.post("/tuturu/:tuturuId/unlike", FBAuth, unlikeTuturuPost);
+// TODO: delete tuturu
 
 //user routes
 app.post("/signup", signup);
