@@ -4,6 +4,7 @@ const { ResultStorage } = require("firebase-functions/lib/providers/testLab");
 const app = require("express")();
 
 const FBAuth = require("./util/fbAuth");
+const { db } = require(`./util/admin`);
 
 const {
   getAllTuturus,
@@ -41,3 +42,63 @@ app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUserData);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
+
+exports.createNotificationOnLike = functions
+  .region("europe-west3")
+  .firestore.document("/likes/{id}")
+  .onCreate(async (snapshot) => {
+    try {
+      let docData = await db.doc(`/tuturus/${snapshot.data().screamId}`).get();
+
+      if (docData.exists) {
+        await db.doc(`/notifications/${snapshot.id}`).set({
+          recipient: docData.data().userHandle,
+          sender: snapshot.data().userHandle,
+          read: "false",
+          type: "like",
+          tuturuId: docData.id,
+          createdAt: new Date().toISOString(),
+        });
+      }
+      return;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  });
+
+exports.deleteNotificationOnLide = functions
+  .region("europe-west3")
+  .firestore.document("/likes/{id}")
+  .onDelete(async (snapshot) => {
+    try {
+      await db.doc(`/notifications/${snapshot.id}`).delete();
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  });
+
+exports.createNotificationOnComment = functions
+  .region("europe-west3")
+  .firestore.document("/comments/{id}")
+  .onCreate(async (snapshot) => {
+    try {
+      let docData = await db.doc(`/tuturus/${snapshot.data().screamId}`).get();
+
+      if (docData.exists) {
+        await db.doc(`/notifications/${snapshot.id}`).set({
+          recipient: docData.data().userHandle,
+          sender: snapshot.data().userHandle,
+          read: "false",
+          type: "comment",
+          tuturuId: docData.id,
+          createdAt: new Date().toISOString(),
+        });
+      }
+      return;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  });
