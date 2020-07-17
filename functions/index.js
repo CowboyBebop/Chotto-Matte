@@ -54,10 +54,7 @@ exports.createNotificationOnLike = functions
     try {
       let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
-      if (
-        docData.exists &&
-        doc.data().userHandle !== snapshot.data().userHandle
-      ) {
+      if (docData.exists && doc.data().userHandle !== snapshot.data().userHandle) {
         await db.doc(`/notifications/${snapshot.id}`).set({
           recipient: docData.data().userHandle,
           sender: snapshot.data().userHandle,
@@ -94,10 +91,7 @@ exports.createNotificationOnComment = functions
     try {
       let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
-      if (
-        docData.exists &&
-        doc.data().userHandle !== snapshot.data().userHandle
-      ) {
+      if (docData.exists && doc.data().userHandle !== snapshot.data().userHandle) {
         await db.doc(`/notifications/${snapshot.id}`).set({
           recipient: docData.data().userHandle,
           sender: snapshot.data().userHandle,
@@ -114,20 +108,21 @@ exports.createNotificationOnComment = functions
     }
   });
 
-  exports.onUserImageChange = functions
-  .regions("europe-west3")
-  .firestore.document("/user/{userId}")
-  .onUpdate((change) => {
+exports.onUserImageChange = functions
+  .region("europe-west3")
+  .firestore.document("/users/{userId}")
+  .onUpdate(async (change) => {
     try {
-      if (change.before.data().imageUrl !== change.after.data().imageUrl) {
+      if (change.before.data().profileImageUrl !== change.after.data().profileImageUrl) {
         let batch = db.batch();
-        let userPostsDoc = await db.collection('tuturus')
-          .where('userHandle','==',change.before.date().userHandle)
+        let userPostsDoc = await db
+          .collection("tuturus")
+          .where("userHandle", "==", change.before.data().userHandle)
           .get();
 
-        userPostsDoc.forEach(doc => { 
-          const tuturu =  db.doc(`/tuturus/${doc.id}`);
-          batch.update(tuturu, {profileImageUrl: change.after.data().profileImageUrl});
+        userPostsDoc.forEach((doc) => {
+          const tuturu = db.doc(`/tuturus/${doc.id}`);
+          batch.update(tuturu, { profileImageUrl: change.after.data().profileImageUrl });
         });
         return batch.commit();
       }
@@ -137,38 +132,37 @@ exports.createNotificationOnComment = functions
     }
   });
 
-  exports.onTuturuDelete = functions.regions("europe-west3")
-  .firestore.document("/user/{userId}")
-  .onDelete((snapshot,context) => {
-    try{
-    const tuturuId = context.params.screamId;
-    const batch = db.batch();
+exports.onTuturuDelete = functions
+  .region("europe-west3")
+  .firestore.document("/tuturus/{tuturuId}")
+  .onDelete(async (snapshot, context) => {
+    try {
+      const tuturuId = context.params.tuturuId;
+      const batch = db.batch();
 
-    let commentDocData = await db.collection('comments')
-      .where('tuturuId','==',tuturuId)
-      .get();
+      let commentDocData = await db.collection("comments").where("tuturuId", "==", tuturuId).get();
 
-    commentDocData.forEach(doc => {
-      batch.delete(db.doc(`/comments/${doc.id}`));
-    })
+      commentDocData.forEach((doc) => {
+        batch.delete(db.doc(`/comments/${doc.id}`));
+      });
 
-    let likeDocData = await db.collection('likes')
-      .where('tuturuId','==',tuturuId)
-      .get();
+      let likeDocData = await db.collection("likes").where("tuturuId", "==", tuturuId).get();
 
-    likeDocData.forEach(doc => {
-      batch.delete(db.doc(`/likes/${doc.id}`));
-    });
+      likeDocData.forEach((doc) => {
+        batch.delete(db.doc(`/likes/${doc.id}`));
+      });
 
-    let notificationDocData = await db.collection('notifications')
-      .where('tuturuId','==',tuturuId)
-      .get();
+      let notificationDocData = await db
+        .collection("notifications")
+        .where("tuturuId", "==", tuturuId)
+        .get();
 
-      notificationDocData.forEach(doc => {
-      batch.delete(db.doc(`/notifications/${doc.id}`));
-    });
+      notificationDocData.forEach((doc) => {
+        batch.delete(db.doc(`/notifications/${doc.id}`));
+      });
+      return batch.commit();
     } catch (err) {
       console.error(err);
       return;
-    } 
+    }
   });
