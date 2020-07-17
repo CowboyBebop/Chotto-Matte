@@ -29,7 +29,6 @@ exports.signup = (req, res) => {
 
   const defaultpfp = "default-pfp-img.png";
 
-  //TODO: validate data
   let token, userId;
   db.doc(`/users/${newUser.userHandle}`)
     .get()
@@ -197,6 +196,26 @@ exports.getAuthenticatedUserData = (req, res) => {
       userData.likes = [];
       data.forEach((doc) => {
         userData.likes.push(doc.data());
+      });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", req.user.userHandle)
+        .orderBy("createdAt", "desc")
+        .limit(10)
+        .get();
+    })
+    .then((data) => {
+      userData.notifications = [];
+      data.forEach((doc) => {
+        userData.notifications.push({
+          recipient: doc.data().reicipent,
+          sender: doc.data().sender,
+          createdAt: doc.data().createdAt,
+          tuturuId: doc.data().tuturuId,
+          type: doc.data().type,
+          read: doc.data().read,
+          notifiactionId: doc.id,
+        });
       });
       return res.json(userData);
     })

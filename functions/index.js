@@ -67,7 +67,7 @@ exports.createNotificationOnLike = functions
     }
   });
 
-exports.deleteNotificationOnLide = functions
+exports.deleteNotificationOnUnlike = functions
   .region("europe-west3")
   .firestore.document("/likes/{id}")
   .onDelete(async (snapshot) => {
