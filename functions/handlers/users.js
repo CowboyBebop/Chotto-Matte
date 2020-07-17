@@ -225,8 +225,6 @@ exports.getAuthenticatedUserData = (req, res) => {
     });
 };
 
-exports.markNotificationsAsRead = async (req, res) => {};
-
 exports.getUserDetails = async (req, res) => {
   try {
     let userData = {};
@@ -237,7 +235,7 @@ exports.getUserDetails = async (req, res) => {
       res.status(404).json({ error: "User not found" });
     }
 
-    UserRecordMetadata.user = userDoc.data();
+    userData.user = userDoc.data();
 
     let userDocData = await db
       .collection("tuturus")
@@ -251,20 +249,24 @@ exports.getUserDetails = async (req, res) => {
       userData.tuturus.push({ ...doc.data(), tuturuId: doc.id });
     });
 
-    /*
-  userDocData.forEach((doc) => {
-    userData.tuturus.push({
-      body: doc.data().body,
-      createdAt: doc.data().createdAt,
-      userHandle: doc.data().userHandle,
-      ProfileImageUrl: doc.data().ProfileImageUrl,
-      likeCount: doc.data().likeCount,
-      commentCount: doc.data().commentCount,
-      tuturuId: doc.id,
-    });
-  });
-  */
     return res.json(userData);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.code });
+  }
+};
+
+exports.markNotificationsAsRead = async (req, res) => {
+  try {
+    let batch = db.batch();
+
+    req.body.forEach((notificationId) => {
+      const notification = db.doc(`/notifications/${notificationId}`);
+      batch.update(notification, { read: true });
+    });
+    await batch.commit();
+
+    return res.json({ message: "Notifications marked as read" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err.code });
