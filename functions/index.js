@@ -48,7 +48,7 @@ exports.createNotificationOnLike = functions
   .firestore.document("/likes/{id}")
   .onCreate(async (snapshot) => {
     try {
-      let docData = await db.doc(`/tuturus/${snapshot.data().screamId}`).get();
+      let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
       if (docData.exists) {
         await db.doc(`/notifications/${snapshot.id}`).set({
@@ -84,7 +84,7 @@ exports.createNotificationOnComment = functions
   .firestore.document("/comments/{id}")
   .onCreate(async (snapshot) => {
     try {
-      let docData = await db.doc(`/tuturus/${snapshot.data().screamId}`).get();
+      let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
       if (docData.exists) {
         await db.doc(`/notifications/${snapshot.id}`).set({
