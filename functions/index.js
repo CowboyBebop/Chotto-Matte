@@ -114,25 +114,61 @@ exports.createNotificationOnComment = functions
     }
   });
 
-exports.onUserImageChange = functions
+  exports.onUserImageChange = functions
   .regions("europe-west3")
   .firestore.document("/user/{userId}")
   .onUpdate((change) => {
     try {
       if (change.before.data().imageUrl !== change.after.data().imageUrl) {
-      let batch = db.batch();
-      let userPostsDoc = await db.collection('tuturus')
-        .where('userHandle','==',change.before.date().userHandle)
-        .get();
+        let batch = db.batch();
+        let userPostsDoc = await db.collection('tuturus')
+          .where('userHandle','==',change.before.date().userHandle)
+          .get();
 
-      userPostsDoc.forEach(doc => {
-        const tuturu =  db.doc(`/tuturus/${doc.id}`);
-        batch.update(tuturu, {profileImageUrl: change.after.data().profileImageUrl});
-      });
-      return batch.commit();
+        userPostsDoc.forEach(doc => { 
+          const tuturu =  db.doc(`/tuturus/${doc.id}`);
+          batch.update(tuturu, {profileImageUrl: change.after.data().profileImageUrl});
+        });
+        return batch.commit();
       }
     } catch (err) {
       console.error(err);
       return;
     }
+  });
+
+  exports.onTuturuDelete = functions.regions("europe-west3")
+  .firestore.document("/user/{userId}")
+  .onDelete((snapshot,context) => {
+    try{
+    const tuturuId = context.params.screamId;
+    const batch = db.batch();
+
+    let commentDocData = await db.collection('comments')
+      .where('tuturuId','==',tuturuId)
+      .get();
+
+    commentDocData.forEach(doc => {
+      batch.delete(db.doc(`/comments/${doc.id}`));
+    })
+
+    let likeDocData = await db.collection('likes')
+      .where('tuturuId','==',tuturuId)
+      .get();
+
+    likeDocData.forEach(doc => {
+      batch.delete(db.doc(`/likes/${doc.id}`));
+    });
+
+    let notificationDocData = await db.collection('notifications')
+      .where('tuturuId','==',tuturuId)
+      .get();
+
+      notificationDocData.forEach(doc => {
+      batch.delete(db.doc(`/notifications/${doc.id}`));
+    });
+    } catch (err) {
+      console.error(err);
+      return;
+    } 
   });
