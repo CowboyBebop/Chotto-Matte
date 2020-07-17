@@ -224,3 +224,49 @@ exports.getAuthenticatedUserData = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+exports.markNotificationsAsRead = async (req, res) => {};
+
+exports.getUserDetails = async (req, res) => {
+  try {
+    let userData = {};
+
+    let userDoc = await db.doc(`users/${req.params.userHandle}`).get();
+
+    if (!userDoc.exists) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    UserRecordMetadata.user = userDoc.data();
+
+    let userDocData = await db
+      .collection("tuturus")
+      .where("userHandle", "==", req.params.userHandle)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    userData.tuturus = [];
+
+    userDocData.forEach((doc) => {
+      userData.tuturus.push({ ...doc.data(), tuturuId: doc.id });
+    });
+
+    /*
+  userDocData.forEach((doc) => {
+    userData.tuturus.push({
+      body: doc.data().body,
+      createdAt: doc.data().createdAt,
+      userHandle: doc.data().userHandle,
+      ProfileImageUrl: doc.data().ProfileImageUrl,
+      likeCount: doc.data().likeCount,
+      commentCount: doc.data().commentCount,
+      tuturuId: doc.id,
+    });
+  });
+  */
+    return res.json(userData);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.code });
+  }
+};

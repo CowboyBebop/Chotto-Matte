@@ -22,6 +22,8 @@ const {
   uploadProfileImage,
   addUserDetails,
   getAuthenticatedUserData,
+  markNotificationsAsRead,
+  getUserDetails,
 } = require(`./handlers/users`);
 const fbAuth = require("./util/fbAuth");
 
@@ -38,8 +40,10 @@ app.delete("/tuturu/:tuturuId", FBAuth, deleteTuturuById);
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", FBAuth, uploadProfileImage);
+app.post("/notifications", FBAuth, markNotificationsAsRead);
 app.post("/user", FBAuth, addUserDetails);
 app.get("/user", FBAuth, getAuthenticatedUserData);
+app.get("/user/:userHandle", getUserDetails);
 
 exports.api = functions.region("europe-west3").https.onRequest(app);
 
