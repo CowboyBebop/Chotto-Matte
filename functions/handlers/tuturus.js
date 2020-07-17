@@ -9,9 +9,7 @@ exports.getAllTuturus = (req, res) => {
       data.forEach((doc) => {
         tuturus.push({
           tuturuId: doc.id,
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt,
+          ...doc.data(),
         });
       });
       return res.json(tuturus);
@@ -76,8 +74,7 @@ exports.getTuturuById = (req, res) => {
 
 exports.postCommentOnTuturu = async (req, res) => {
   try {
-    if (req.body.body.trim() === "")
-      return res.status(400).json({ error: "must not be empty" });
+    if (req.body.body.trim() === "") return res.status(400).json({ comment: "must not be empty" });
 
     const newComment = {
       body: req.body.body.trim(),
@@ -92,6 +89,10 @@ exports.postCommentOnTuturu = async (req, res) => {
     if (!tuturuDoc.exists) {
       return res.status(404).json({ error: "tuturu post not found" });
     }
+
+    await tuturuDoc.ref.update({
+      commentCount: tuturuDoc.data().commentCount + 1,
+    });
 
     await db.collection("comments").add(newComment);
 
@@ -168,9 +169,7 @@ exports.unlikeTuturuPost = async (req, res) => {
     let likeData = await likeDocument.get();
 
     if (likeData.empty) {
-      return res
-        .status(400)
-        .json({ error: "There's no like for this Tuturu post" });
+      return res.status(400).json({ error: "There's no like for this Tuturu post" });
     } else {
       await db.doc(`/likes/${likeData.docs[0].id}`).delete();
 
@@ -179,6 +178,30 @@ exports.unlikeTuturuPost = async (req, res) => {
 
       res.json(tuturuData);
     }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(error.code);
+  }
+};
+
+exports.deleteTuturuById = async (req, res) => {
+  try {
+    let tuturuDoc = await db.doc(`/tuturus/${req.params.tuturuId}`).get();
+
+    if (!tuturuDoc.exists) {
+      return res.status(404).json({ error: "tuturu post not found" });
+    }
+
+    let tuturuDocUserHandle = tuturuDoc.data().userHandle;
+
+    if (tuturuDocUserHandle !== req.user.userHandle) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    let docData = await tuturuDoc.data();
+    await tuturuDoc.ref.delete();
+
+    res.json(docData);
   } catch (err) {
     console.error(err);
     res.status(500).json(error.code);

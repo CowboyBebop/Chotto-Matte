@@ -29,7 +29,6 @@ exports.signup = (req, res) => {
 
   const defaultpfp = "default-pfp-img.png";
 
-  //TODO: validate data
   let token, userId;
   db.doc(`/users/${newUser.userHandle}`)
     .get()
@@ -54,7 +53,7 @@ exports.signup = (req, res) => {
         userHandle: newUser.userHandle,
         email: newUser.email,
         createdAt: new Date().toISOString(),
-        profileImage: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultpfp}?alt=media`,
+        profileImageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultpfp}?alt=media`,
         userId,
       };
       return db.doc(`/users/${newUser.userHandle}`).set(userCredentials);
@@ -65,11 +64,11 @@ exports.signup = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.code === "auth/email-already-in-use") {
-        return res
-          .status(400)
-          .json({ handle: "you came into the wrong neigborhood fool!" });
+        return res.status(400).json({ email: "Email already in use" });
       } else {
-        return res.status(500).json({ error: err.code });
+        return res
+          .status(500)
+          .json({ general: "Something went wrong, please try again" });
       }
     });
 };
@@ -198,10 +197,78 @@ exports.getAuthenticatedUserData = (req, res) => {
       data.forEach((doc) => {
         userData.likes.push(doc.data());
       });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", req.user.userHandle)
+        .orderBy("createdAt", "desc")
+        .limit(10)
+        .get();
+    })
+    .then((data) => {
+      userData.notifications = [];
+      data.forEach((doc) => {
+        userData.notifications.push({
+          recipient: doc.data().reicipent,
+          sender: doc.data().sender,
+          createdAt: doc.data().createdAt,
+          tuturuId: doc.data().tuturuId,
+          type: doc.data().type,
+          read: doc.data().read,
+          notifiactionId: doc.id,
+        });
+      });
       return res.json(userData);
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+};
+
+exports.getUserDetails = async (req, res) => {
+  try {
+    let userData = {};
+
+    let userDoc = await db.doc(`users/${req.params.userHandle}`).get();
+
+    if (!userDoc.exists) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    userData.user = userDoc.data();
+
+    let userDocData = await db
+      .collection("tuturus")
+      .where("userHandle", "==", req.params.userHandle)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    userData.tuturus = [];
+
+    userDocData.forEach((doc) => {
+      userData.tuturus.push({ ...doc.data(), tuturuId: doc.id });
+    });
+
+    return res.json(userData);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.code });
+  }
+};
+
+exports.markNotificationsAsRead = async (req, res) => {
+  try {
+    let batch = db.batch();
+
+    req.body.forEach((notificationId) => {
+      const notification = db.doc(`/notifications/${notificationId}`);
+      batch.update(notification, { read: true });
+    });
+    await batch.commit();
+
+    return res.json({ message: "Notifications marked as read" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.code });
+  }
 };
