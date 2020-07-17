@@ -93,6 +93,10 @@ exports.postCommentOnTuturu = async (req, res) => {
       return res.status(404).json({ error: "tuturu post not found" });
     }
 
+    await tuturuDoc.ref.update({
+      commentCount: tuturuDoc.data().commentCount + 1,
+    });
+
     await db.collection("comments").add(newComment);
 
     res.json(newComment);
@@ -179,6 +183,30 @@ exports.unlikeTuturuPost = async (req, res) => {
 
       res.json(tuturuData);
     }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(error.code);
+  }
+};
+
+exports.deleteTuturuById = async (req, res) => {
+  try {
+    let tuturuDoc = await db.doc(`/tuturus/${req.params.tuturuId}`).get();
+
+    if (!tuturuDoc.exists) {
+      return res.status(404).json({ error: "tuturu post not found" });
+    }
+
+    let tuturuDocUserHandle = tuturuDoc.data().userHandle;
+
+    if (tuturuDocUserHandle !== req.user.userHandle) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    let docData = await tuturuDoc.data();
+    await tuturuDoc.ref.delete();
+
+    res.json(docData);
   } catch (err) {
     console.error(err);
     res.status(500).json(error.code);

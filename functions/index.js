@@ -12,6 +12,7 @@ const {
   postCommentOnTuturu,
   likeTuturuPost,
   unlikeTuturuPost,
+  deleteTuturuById,
 } = require(`./handlers/tuturus`);
 
 const {
@@ -30,7 +31,7 @@ app.post("/tuturu", FBAuth, postOneTuturu);
 app.post("/tuturu/:tuturuId/comment", FBAuth, postCommentOnTuturu);
 app.post("/tuturu/:tuturuId/like", FBAuth, likeTuturuPost);
 app.post("/tuturu/:tuturuId/unlike", FBAuth, unlikeTuturuPost);
-// TODO: delete tuturu
+app.delete("/tuturu/:tuturuId", FBAuth, deleteTuturuById);
 
 //user routes
 app.post("/signup", signup);
