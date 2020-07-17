@@ -9,9 +9,7 @@ exports.getAllTuturus = (req, res) => {
       data.forEach((doc) => {
         tuturus.push({
           tuturuId: doc.id,
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt,
+          ...doc.data(),
         });
       });
       return res.json(tuturus);
@@ -77,7 +75,7 @@ exports.getTuturuById = (req, res) => {
 exports.postCommentOnTuturu = async (req, res) => {
   try {
     if (req.body.body.trim() === "")
-      return res.status(400).json({ error: "must not be empty" });
+      return res.status(400).json({ comment: "must not be empty" });
 
     const newComment = {
       body: req.body.body.trim(),

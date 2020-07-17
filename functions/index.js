@@ -54,7 +54,10 @@ exports.createNotificationOnLike = functions
     try {
       let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
-      if (docData.exists) {
+      if (
+        docData.exists &&
+        doc.data().userHandle !== snapshot.data().userHandle
+      ) {
         await db.doc(`/notifications/${snapshot.id}`).set({
           recipient: docData.data().userHandle,
           sender: snapshot.data().userHandle,
@@ -77,6 +80,7 @@ exports.deleteNotificationOnUnlike = functions
   .onDelete(async (snapshot) => {
     try {
       await db.doc(`/notifications/${snapshot.id}`).delete();
+      return;
     } catch (err) {
       console.error(err);
       return;
@@ -90,7 +94,10 @@ exports.createNotificationOnComment = functions
     try {
       let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
-      if (docData.exists) {
+      if (
+        docData.exists &&
+        doc.data().userHandle !== snapshot.data().userHandle
+      ) {
         await db.doc(`/notifications/${snapshot.id}`).set({
           recipient: docData.data().userHandle,
           sender: snapshot.data().userHandle,
@@ -101,6 +108,29 @@ exports.createNotificationOnComment = functions
         });
       }
       return;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  });
+
+exports.onUserImageChange = functions
+  .regions("europe-west3")
+  .firestore.document("/user/{userId}")
+  .onUpdate((change) => {
+    try {
+      if (change.before.data().imageUrl !== change.after.data().imageUrl) {
+      let batch = db.batch();
+      let userPostsDoc = await db.collection('tuturus')
+        .where('userHandle','==',change.before.date().userHandle)
+        .get();
+
+      userPostsDoc.forEach(doc => {
+        const tuturu =  db.doc(`/tuturus/${doc.id}`);
+        batch.update(tuturu, {profileImageUrl: change.after.data().profileImageUrl});
+      });
+      return batch.commit();
+      }
     } catch (err) {
       console.error(err);
       return;
