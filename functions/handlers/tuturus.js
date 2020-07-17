@@ -9,9 +9,7 @@ exports.getAllTuturus = (req, res) => {
       data.forEach((doc) => {
         tuturus.push({
           tuturuId: doc.id,
-          body: doc.data().body,
-          userHandle: doc.data().userHandle,
-          createdAt: doc.data().createdAt,
+          ...doc.data(),
         });
       });
       return res.json(tuturus);
@@ -76,8 +74,7 @@ exports.getTuturuById = (req, res) => {
 
 exports.postCommentOnTuturu = async (req, res) => {
   try {
-    if (req.body.body.trim() === "")
-      return res.status(400).json({ error: "must not be empty" });
+    if (req.body.body.trim() === "") return res.status(400).json({ comment: "must not be empty" });
 
     const newComment = {
       body: req.body.body.trim(),
@@ -172,9 +169,7 @@ exports.unlikeTuturuPost = async (req, res) => {
     let likeData = await likeDocument.get();
 
     if (likeData.empty) {
-      return res
-        .status(400)
-        .json({ error: "There's no like for this Tuturu post" });
+      return res.status(400).json({ error: "There's no like for this Tuturu post" });
     } else {
       await db.doc(`/likes/${likeData.docs[0].id}`).delete();
 
