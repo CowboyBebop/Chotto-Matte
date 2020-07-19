@@ -5,15 +5,8 @@ const config = require("../util/config");
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
-const {
-  validateSignupData,
-  validateLoginData,
-  reduceUserDetails,
-} = require(`../util/validators`);
-const {
-  UserRecordMetadata,
-  user,
-} = require("firebase-functions/lib/providers/auth");
+const { validateSignupData, validateLoginData, reduceUserDetails } = require(`../util/validators`);
+const { UserRecordMetadata, user } = require("firebase-functions/lib/providers/auth");
 
 exports.signup = (req, res) => {
   const newUser = {
@@ -34,13 +27,9 @@ exports.signup = (req, res) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        return res
-          .status(400)
-          .json({ userHandle: "you came into the wrong neigborhood fool!" });
+        return res.status(400).json({ userHandle: "you came into the wrong neigborhood fool!" });
       } else {
-        return firebase
-          .auth()
-          .createUserWithEmailAndPassword(newUser.email, newUser.password);
+        return firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password);
       }
     })
     .then((data) => {
@@ -66,9 +55,7 @@ exports.signup = (req, res) => {
       if (err.code === "auth/email-already-in-use") {
         return res.status(400).json({ email: "Email already in use" });
       } else {
-        return res
-          .status(500)
-          .json({ general: "Something went wrong, please try again" });
+        return res.status(500).json({ general: "Something went wrong, please try again" });
       }
     });
 };
@@ -95,9 +82,7 @@ exports.login = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.code === `auth/wrong-password`) {
-        return res
-          .status(403)
-          .json({ general: `Wrong credentials, please try again` });
+        return res.status(403).json({ general: `Wrong credentials, please try again` });
       } else return res.status(500).json({ error: err.code });
     });
 };
@@ -134,9 +119,7 @@ exports.uploadProfileImage = (req, res) => {
     //my.image.png
     const imageExtension = filename.split(".")[filename.split(".").length - 1];
     //12321505124050.png
-    imageFileName = `${Math.round(
-      Math.random() * 1000000000000
-    ).toString()}.${imageExtension}`;
+    imageFileName = `${Math.round(Math.random() * 1000000000000).toString()}.${imageExtension}`;
 
     const filepath = path.join(os.tmpdir(), imageFileName);
 
@@ -160,9 +143,7 @@ exports.uploadProfileImage = (req, res) => {
       })
       .then(() => {
         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-        return db
-          .doc(`/users/${req.user.userHandle}`)
-          .update({ profileImage: imageUrl });
+        return db.doc(`/users/${req.user.userHandle}`).update({ profileImage: imageUrl });
       })
       .then(() => {
         return res.json({ message: `image uploaded successfuly` });
@@ -186,10 +167,7 @@ exports.getAuthenticatedUserData = (req, res) => {
       if (doc.exists) {
         userData.credentials = doc.data();
 
-        return db
-          .collection("likes")
-          .where("userHandle", "==", req.user.userHandle)
-          .get();
+        return db.collection("likes").where("userHandle", "==", req.user.userHandle).get();
       }
     })
     .then((data) => {

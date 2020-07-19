@@ -28,7 +28,7 @@ const {
 const fbAuth = require("./util/fbAuth");
 
 // Tuturu routes
-app.get("/tuturus", FBAuth, getAllTuturus);
+app.get("/tuturus", getAllTuturus);
 app.get("/tuturu/:tuturuId", getTuturuById);
 app.post("/tuturu", FBAuth, postOneTuturu);
 app.post("/tuturu/:tuturuId/comment", FBAuth, postCommentOnTuturu);
