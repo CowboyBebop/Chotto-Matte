@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+
+//MUI Components
+import Grid from "@material-ui/core/Grid";
 
 import Tuturu from "../components/Tuturu";
 
@@ -22,7 +24,7 @@ class home extends Component {
   }
   render() {
     let recentScreamsMarkup = this.state.tuturus ? (
-      this.state.tuturus.map((tuturu) => <Tuturu tuturu={tuturu} />)
+      this.state.tuturus.map((tuturu) => <Tuturu key={tuturu.tuturuId} tuturu={tuturu} />)
     ) : (
       <p>Loading...</p>
     );

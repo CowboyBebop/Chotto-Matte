@@ -143,7 +143,7 @@ exports.uploadProfileImage = (req, res) => {
       })
       .then(() => {
         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`;
-        return db.doc(`/users/${req.user.userHandle}`).update({ profileImage: imageUrl });
+        return db.doc(`/users/${req.user.userHandle}`).update({ profileImageUrl: imageUrl });
       })
       .then(() => {
         return res.json({ message: `image uploaded successfuly` });
