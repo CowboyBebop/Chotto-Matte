@@ -13,10 +13,6 @@ class home extends Component {
   async componentDidMount() {
     try {
       let res = await axios.get("/tuturus");
-      console.log(res.config.baseURL);
-      console.log(res.config.url);
-      console.log(res.config.socketPath);
-
       this.setState({
         tuturus: res.data,
       });

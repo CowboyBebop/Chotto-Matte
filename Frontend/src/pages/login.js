@@ -12,29 +12,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TotoroImage from "../images/TotoroUmbrella.png";
 import { Link } from "react-router-dom";
 
-const styles = {
-  form: {
-    textAlign: "center",
-  },
-  loginImage: {
-    height: 150,
-    margin: "20px auto 20px auto",
-  },
-  pageTitle: {
-    margin: "10px auto 10px auto",
-  },
-  textField: {
-    margin: "10px auto 10px auto",
-  },
-  button: {
-    marginTop: 10,
-  },
-  customError: {
-    color: "red",
-    frontSize: "0.8rem",
-    marginTop: 10,
-  },
-};
+const styles = (theme) => ({
+  ...theme.customStyles,
+});
 
 class login extends Component {
   constructor() {
@@ -62,10 +42,12 @@ class login extends Component {
         userData
       );
 
-      console.log(res.data);
+      localStorage.setItem("FBIdToken", `Bearer ${res.data.token}`);
+
       this.setState({
         loading: false,
       });
+
       this.props.history.push("/");
     } catch (err) {
       this.setState({
@@ -86,9 +68,9 @@ class login extends Component {
       <Grid container className={classes.form}>
         <Grid item sm />
         <Grid item sm>
-          <img src={TotoroImage} alt="app icon" className={classes.loginImage} />
+          <img src={TotoroImage} alt="app icon" className={classes.totoroImage} />
           <Typography variant="h3" className={classes.pageTitle}>
-            Login
+            Signup
           </Typography>
           <form noValidate onSubmit={this.handleSubmit}>
             <TextField
