@@ -13,13 +13,11 @@ exports.validateSignupData = (signupData) => {
   let errors = {};
 
   if (isEmpty(signupData.email)) errors.email = `Must not be empty`;
-  else if (!isEmail(signupData.email))
-    errors.email = `Must be a valid email address`;
+  else if (!isEmail(signupData.email)) errors.email = `Must be a valid email address`;
 
   if (isEmpty(signupData.password)) errors.password = `Must not be empty`;
   if (isEmpty(signupData.userHandle)) errors.userHandle = `Must not be empty`;
-  if (signupData.password !== signupData.confirmPassword)
-    errors.password = `Passwords must match`;
+  if (signupData.password !== signupData.confirmPassword) errors.password = `Passwords must match`;
 
   return {
     errors,
@@ -32,8 +30,6 @@ exports.validateLoginData = (user) => {
 
   if (isEmpty(user.email)) errors.email = `Must not be empty`;
   if (isEmpty(user.password)) errors.password = `Must not be empty`;
-
-  if (Object.keys(errors).length > 0) return res.status(400).json(errors);
 
   return {
     errors,
@@ -51,8 +47,7 @@ exports.reduceUserDetails = (userData) => {
       userDetails.website = `http://${userData.website.trim()}`;
     else userDetails.website = data.website;
   }
-  if (!isEmpty(userData.location.trim()))
-    userDetails.location = userData.location;
+  if (!isEmpty(userData.location.trim())) userDetails.location = userData.location;
 
   return userDetails;
 };

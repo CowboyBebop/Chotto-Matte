@@ -8,8 +8,9 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 import TotoroImage from "../images/TotoroUmbrella.png";
+import { Link } from "react-router-dom";
 
 const styles = {
   form: {
@@ -26,6 +27,11 @@ const styles = {
     margin: "10px auto 10px auto",
   },
   button: {
+    marginTop: 10,
+  },
+  customError: {
+    color: "red",
+    frontSize: "0.8rem",
     marginTop: 10,
   },
 };
@@ -51,7 +57,10 @@ class login extends Component {
     };
 
     try {
-      let res = await axios.post("/login", userData);
+      let res = await axios.post(
+        "https://europe-west3-chotto-matte.cloudfunctions.net/api/login",
+        userData
+      );
 
       console.log(res.data);
       this.setState({
@@ -87,29 +96,47 @@ class login extends Component {
               name="email"
               type="email"
               label="Email"
+              className={classes.textField}
               helperText={errors.email}
               error={errors.email ? true : false}
               value={this.state.email}
+              onChange={this.handleChange}
               fullWidth
-              className={classes.textField}
-            ></TextField>
-          </form>
-          <form noValidate onSubmit={this.handleSubmit}>
+            />
             <TextField
               id="password"
               name="password"
               type="password"
               label="Password"
+              className={classes.textField}
               helperText={errors.password}
               error={errors.password ? true : false}
               value={this.state.password}
+              onChange={this.handleChange}
               fullWidth
-              className={classes.textField}
-            ></TextField>
-            <Button color="primary" type="submit" variant="contained" className={classes.button}>
-              login
+            />
+            {errors.general && (
+              <Typography variant="body2" className={classes.customError}>
+                {errors.general}
+              </Typography>
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              disabled={loading}
+            >
+              Login
+              {loading && <CircularProgress size={30} className={classes.progress} />}
             </Button>
           </form>
+          <small>
+            Dont have an account? sign up{" "}
+            <Link to="/signup" color="primary">
+              here
+            </Link>
+          </small>
         </Grid>
         <Grid item sm />
       </Grid>

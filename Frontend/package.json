@@ -31,5 +31,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://europe-west3-chotto-matte.cloudfunctions.net/api"
+  "proxy": "https://europe-west3-chotto-matte.cloudfunctions.net/api/"
 }
