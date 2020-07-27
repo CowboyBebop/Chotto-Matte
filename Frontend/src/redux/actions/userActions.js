@@ -63,6 +63,8 @@ export const logoutUser = () => (dispatch) => {
 
 export const getUserData = () => async (dispatch) => {
   try {
+    dispatch({type:LOADING_USER});
+
     let res = await axios.get("/user");
     dispatch({ type: SET_USER, payload: res.data });
   } catch (err) {
