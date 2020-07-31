@@ -32,7 +32,7 @@ const styles = {
   },
 };
 
-export class Tuturu extends Component {
+class Tuturu extends Component {
   render() {
     const {
       classes,
