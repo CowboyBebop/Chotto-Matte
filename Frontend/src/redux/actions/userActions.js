@@ -14,10 +14,7 @@ export const loginUser = (userData, history) => async (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   try {
-    let res = await axios.post(
-      "https://europe-west3-chotto-matte.cloudfunctions.net/api/login",
-      userData
-    );
+    let res = await axios.post("/login", userData);
 
     setAuthorizationHeader(res.data.token);
 
@@ -37,10 +34,7 @@ export const signupUser = (newUserData, history) => async (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   try {
-    let res = await axios.post(
-      "https://europe-west3-chotto-matte.cloudfunctions.net/api/signup",
-      newUserData
-    );
+    let res = await axios.post("/signup", newUserData);
     setAuthorizationHeader(res.data.token);
 
     dispatch(getUserData());
@@ -57,19 +51,25 @@ export const signupUser = (newUserData, history) => async (dispatch) => {
 
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("FBIdToken");
-  delete axios.defaults.headers.common['Authorization'];
+  delete axios.defaults.headers.common["Authorization"];
   dispatch({ type: SET_AUTHENTICATED });
 };
 
 export const getUserData = () => async (dispatch) => {
   try {
-    dispatch({type:LOADING_USER});
+    dispatch({ type: LOADING_USER });
 
     let res = await axios.get("/user");
     dispatch({ type: SET_USER, payload: res.data });
   } catch (err) {
     console.log(err);
   }
+};
+
+export const uploadImage = (formData) => async (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  let res = await axios.post("/user/image", formData).catch((err) => console.log(err));
+  dispatch(getUserData());
 };
 
 const setAuthorizationHeader = (token) => {
