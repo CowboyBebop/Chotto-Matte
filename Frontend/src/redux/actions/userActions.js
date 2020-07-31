@@ -57,12 +57,14 @@ export const signupUser = (newUserData, history) => async (dispatch) => {
 
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("FBIdToken");
-  delete axios.defaults.headers.common("Authorization");
+  delete axios.defaults.headers.common['Authorization'];
   dispatch({ type: SET_AUTHENTICATED });
 };
 
 export const getUserData = () => async (dispatch) => {
   try {
+    dispatch({type:LOADING_USER});
+
     let res = await axios.get("/user");
     dispatch({ type: SET_USER, payload: res.data });
   } catch (err) {
