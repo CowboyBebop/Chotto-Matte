@@ -52,7 +52,7 @@ export const signupUser = (newUserData, history) => async (dispatch) => {
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("FBIdToken");
   delete axios.defaults.headers.common["Authorization"];
-  dispatch({ type: SET_AUTHENTICATED });
+  dispatch({ type: SET_UNAUTHENTICATED });
 };
 
 export const getUserData = () => async (dispatch) => {
@@ -68,7 +68,7 @@ export const getUserData = () => async (dispatch) => {
 
 export const uploadImage = (formData) => async (dispatch) => {
   dispatch({ type: LOADING_USER });
-  let res = await axios.post("/user/image", formData).catch((err) => console.log(err));
+  await axios.post("/user/image", formData).catch((err) => console.log(err));
   dispatch(getUserData());
 };
 
@@ -76,4 +76,14 @@ const setAuthorizationHeader = (token) => {
   const FBIdToken = `Bearer ${token}`;
   localStorage.setItem("FBIdToken", FBIdToken);
   axios.defaults.headers.common["Authorization"] = FBIdToken;
+};
+
+export const editUserDetails = (userDetails) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING_USER });
+    await axios.post("/user", userDetails);
+    dispatch(getUserData());
+  } catch (err) {
+    console.log(err);
+  }
 };

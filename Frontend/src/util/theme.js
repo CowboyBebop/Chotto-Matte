@@ -36,7 +36,7 @@ export default {
       marginTop: 10,
     },
   },
-  profileStyle: {
+  profileStyles: {
     paper: {
       padding: 20,
     },
@@ -61,6 +61,9 @@ export default {
         textAlign: "center",
         "& span, svg": {
           verticalAlign: "middle",
+        },
+        "& a": {
+          color: "#00bcd4",
         },
       },
       "& hr": {

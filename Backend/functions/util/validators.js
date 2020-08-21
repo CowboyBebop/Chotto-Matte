@@ -45,7 +45,7 @@ exports.reduceUserDetails = (userData) => {
     //https://webapp.com
     if (userData.website.trim().substring(0, 4) !== "http")
       userDetails.website = `http://${userData.website.trim()}`;
-    else userDetails.website = data.website;
+    else userDetails.website = userData.website;
   }
   if (!isEmpty(userData.location.trim())) userDetails.location = userData.location;
 
