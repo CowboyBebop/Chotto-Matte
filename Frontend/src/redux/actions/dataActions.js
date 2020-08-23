@@ -1,4 +1,11 @@
-import { SET_TUTURUS, LOADING_DATA, LIKE_TUTURU, UNLIKE_TUTURU, LOADING_USER } from "../types";
+import {
+  SET_TUTURUS,
+  LOADING_DATA,
+  LIKE_TUTURU,
+  UNLIKE_TUTURU,
+  LOADING_USER,
+  DELETE_TUTURU,
+} from "../types";
 import axios from "axios";
 
 // Get all screams
@@ -26,4 +33,11 @@ export const unlikeTuturu = (tuturuId) => async (dispatch) => {
     .post(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}/unlike`)
     .catch((err) => console.log(err));
   dispatch({ type: UNLIKE_TUTURU, payload: res.data });
+};
+
+export const deleteTuturu = (tuturuId) => async (dispatch) => {
+  await axios
+    .delete(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}`)
+    .catch((err) => console.log(err));
+  dispatch({ type: DELETE_TUTURU, payload: tuturuId });
 };

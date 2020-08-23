@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
+//Other components
 import MyButton from "../util/MyButton";
+import DeleteTuturu from "./DeleteTuturu";
 
 //MUI components
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 
@@ -64,7 +65,7 @@ class Tuturu extends Component {
     const {
       classes,
       tuturu: {
-        tuturuUserHandle = userHandle,
+        userHandle: tuturuUserHandle,
         body,
         createdAt,
         profileImageUrl,
@@ -98,7 +99,7 @@ class Tuturu extends Component {
     );
     const deleteButton =
       authenticated && tuturuUserHandle === userHandle ? (
-        <DeleteScream tuturuId={tuturuId} />
+        <DeleteTuturu tuturuId={tuturuId} />
       ) : null;
     return (
       <Card className={classes.card}>

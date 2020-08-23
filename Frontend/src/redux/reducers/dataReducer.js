@@ -1,4 +1,4 @@
-import { SET_TUTURUS, LIKE_TUTURU, UNLIKE_TUTURU, LOADING_DATA } from "../types";
+import { SET_TUTURUS, LIKE_TUTURU, UNLIKE_TUTURU, LOADING_DATA, DELETE_TUTURU } from "../types";
 
 const initialState = {
   tuturus: [],
@@ -23,6 +23,12 @@ export default function (state = initialState, action) {
     case UNLIKE_TUTURU:
       let index = state.tuturus.findIndex((tuturu) => tuturu.tuturuId === action.payload.tuturuId);
       state.tuturus[index] = action.payload;
+      return {
+        ...state,
+      };
+    case DELETE_TUTURU:
+      index = state.tuturus.findIndex((tuturu) => tuturu.tuturuId === action.payload);
+      state.tuturus.splice(index, 1);
       return {
         ...state,
       };

@@ -15,3 +15,4 @@ export const SET_TUTURUS = "SET_TUTURUS";
 export const SET_TUTURU = "SET_TUTURU";
 export const LIKE_TUTURU = "LIKE_TUTURU";
 export const UNLIKE_TUTURU = "UNLIKE_TUTURU";
+export const DELETE_TUTURU = "DELETE_TUTURU";
