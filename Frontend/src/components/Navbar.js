@@ -9,7 +9,10 @@ import { connect } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
+
+//Custom Components
 import MyButton from "../util/MyButton";
+import PostTuturu from "./PostTuturu";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
@@ -24,10 +27,7 @@ class Navbar extends Component {
         <ToolBar className="nav-container">
           {authenticated ? (
             <Fragment>
-              <MyButton tip="Pot a Scream!">
-                <AddIcon color="secondary" />
-              </MyButton>
-
+              <PostTuturu />
               <Link to="/">
                 <MyButton tip="Home">
                   <HomeIcon color="secondary" />

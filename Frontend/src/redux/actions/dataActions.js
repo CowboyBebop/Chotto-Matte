@@ -3,8 +3,11 @@ import {
   LOADING_DATA,
   LIKE_TUTURU,
   UNLIKE_TUTURU,
-  LOADING_USER,
   DELETE_TUTURU,
+  LOADING_UI,
+  SET_ERRORS,
+  POST_TUTURU,
+  CLEAR_ERRORS,
 } from "../types";
 import axios from "axios";
 
@@ -40,4 +43,28 @@ export const deleteTuturu = (tuturuId) => async (dispatch) => {
     .delete(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}`)
     .catch((err) => console.log(err));
   dispatch({ type: DELETE_TUTURU, payload: tuturuId });
+};
+
+export const postTuturu = (newTuturu) => async (dispatch) => {
+  dispatch({ type: LOADING_UI });
+
+  axios
+    .post("/tuturu", newTuturu)
+    .then((res) => {
+      dispatch({
+        type: POST_TUTURU,
+        payload: res.data,
+      });
+      dispatch(clearErrors());
+    })
+    .catch((err) => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
 };

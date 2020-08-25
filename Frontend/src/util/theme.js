@@ -13,6 +13,20 @@ export default {
       contrastText: "#fff",
     },
   },
+
+  postTuturu: {
+    submitButton: {
+      position: "relative",
+    },
+    progressSpinner: {
+      position: "absolute",
+    },
+    closeButton: {
+      position: "absolute",
+      left: "90%",
+      top: "10%",
+    },
+  },
   loginStyle: {
     form: {
       textAlign: "center",
