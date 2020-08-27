@@ -13,6 +13,32 @@ export default {
       contrastText: "#fff",
     },
   },
+  TuturuStyle: {
+    invisibleSeparator: {
+      width: "100%",
+      border: "none",
+      margin: 4,
+    },
+    visibleSeparator: {
+      width: "99%",
+      borderBottom: "1px solid rgba(0,0,0,0.1)",
+      marginBottom: 20,
+    },
+  },
+
+  postTuturu: {
+    submitButton: {
+      position: "relative",
+      float: "right",
+      marginTop: 10,
+    },
+    progressSpinner: {},
+    closeButton: {
+      position: "absolute",
+      left: "91%",
+      top: "5%",
+    },
+  },
   loginStyle: {
     form: {
       textAlign: "center",
@@ -36,7 +62,7 @@ export default {
       marginTop: 10,
     },
   },
-  profileStyle: {
+  profileStyles: {
     paper: {
       padding: 20,
     },
@@ -61,6 +87,9 @@ export default {
         textAlign: "center",
         "& span, svg": {
           verticalAlign: "middle",
+        },
+        "& a": {
+          color: "#00bcd4",
         },
       },
       "& hr": {

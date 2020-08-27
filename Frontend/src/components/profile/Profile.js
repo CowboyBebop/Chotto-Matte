@@ -1,33 +1,33 @@
 import React, { Component, Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+
+//Custom components
+import EditDetails from "./EditDetails";
+import MyButton from "../../util/MyButton";
 
 //Icons
 import LocationOn from "@material-ui/icons/LocationOn";
 import EditIcon from "@material-ui/icons/Edit";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
+import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 
 //MUI components
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import MuiLink from "@material-ui/core/Link";
-import ToolTip from "@material-ui/core/ToolTip";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 
 //Redux
 import { connect } from "react-redux";
-import { logoutUser, uploadImage } from "../redux/actions/userActions";
+import { logoutUser, uploadImage } from "../../redux/actions/userActions";
 
 import dayjs from "dayjs";
 
 const styles = (theme) => ({
-  ...theme.profileStyle,
+  ...theme.profileStyles,
 });
 
 class Profile extends Component {
@@ -40,6 +40,9 @@ class Profile extends Component {
   handleEditPicture = () => {
     const fileInput = document.getElementById("imageInput");
     fileInput.click();
+  };
+  handleLogout = () => {
+    this.props.logoutUser();
   };
   render() {
     const {
@@ -63,12 +66,15 @@ class Profile extends Component {
                 hidden="hidden"
                 onChange={this.handleImageChange}
               />
-              <ToolTip title="Edit profile picture" placement="top">
-                <IconButton onClick={this.handleEditPicture} className="button">
-                  <EditIcon color="primary" />
-                </IconButton>
-              </ToolTip>
+              <MyButton
+                tip="Edit profile picture"
+                onClick={this.handleEditPicture}
+                btnClassName="button"
+              >
+                <EditIcon color="primary" />
+              </MyButton>
             </div>
+            <hr />
             <div className="profile-details">
               <MuiLink component={Link} to={`/users/${userHandle}`} color="primary" variant="h5">
                 @{userHandle}
@@ -78,11 +84,10 @@ class Profile extends Component {
               <hr />
               {location && (
                 <Fragment>
-                  <LocationOn color="primary" />
-                  <span>{location}</span>
+                  <LocationOn color="primary" /> <span>{location}</span>
+                  <hr />
                 </Fragment>
               )}
-              <hr />
               {website && (
                 <Fragment>
                   <LinkIcon color="primary" />
@@ -96,6 +101,10 @@ class Profile extends Component {
               <CalendarToday color="primary" />{" "}
               <span>Joined {dayjs(createdAt).format("MMM YYYY")}</span>
             </div>
+            <MyButton tip="Logout" onClick={this.handleLogout}>
+              <KeyboardReturn color="primary" />
+            </MyButton>
+            <EditDetails />
           </div>
         </Paper>
       ) : (
@@ -125,13 +134,13 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
+const mapActionsToProps = { logoutUser, uploadImage };
+
 Profile.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   uploadImage: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
-
-const mapActionsToProps = { logoutUser, uploadImage };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Profile));
