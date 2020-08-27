@@ -16,7 +16,6 @@ import PostTuturu from "../tuturu/PostTuturu";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
-import AddIcon from "@material-ui/icons/Add";
 import Notifications from "@material-ui/icons/Notifications";
 
 class Navbar extends Component {

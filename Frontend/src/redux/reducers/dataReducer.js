@@ -6,6 +6,7 @@ import {
   LOADING_DATA,
   DELETE_TUTURU,
   POST_TUTURU,
+  SUBMIT_COMMENT,
 } from "../types";
 
 const initialState = {
@@ -54,6 +55,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         tuturus: [action.payload, ...state.tuturus],
+      };
+    case SUBMIT_COMMENT:
+      return {
+        ...state,
+        tuturu: {
+          ...state.tuturu,
+          comments: [action.payload, ...state.tuturu.comments],
+        },
       };
 
     default:

@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -17,13 +16,9 @@ import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 
 //MUI components
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import MuiLink from "@material-ui/core/Link";
-import ToolTip from "@material-ui/core/ToolTip";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 
 //Redux
 import { connect } from "react-redux";

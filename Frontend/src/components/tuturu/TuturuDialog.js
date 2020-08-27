@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -10,11 +9,8 @@ import { connect } from "react-redux";
 import { getTuturu, clearErrors } from "../../redux/actions/dataActions";
 
 //MUI components
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -23,9 +19,9 @@ import Typography from "@material-ui/core/Typography";
 import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
 import Comments from "./Comments";
+import CommentForm from "./CommentForm";
 
 //Icons
-import AddIcon from "@material-ui/icons/Add";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import CloseIcon from "@material-ui/icons/Close";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -113,6 +109,7 @@ class TuturuDialog extends Component {
           </MyButton>
           <span>{commentCount} Comments </span>
         </Grid>
+        <CommentForm tuturuId={tuturuId} />
         <Comments comments={comments} />
       </Grid>
     );
@@ -126,7 +123,6 @@ class TuturuDialog extends Component {
           <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
             <CloseIcon />
           </MyButton>
-          <hr className={classes.visibleSeparator} />
           <DialogContent>{dialogMarkup}</DialogContent>
         </Dialog>
       </Fragment>
