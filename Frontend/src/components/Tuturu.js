@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 //Other components
 import MyButton from "../util/MyButton";
 import DeleteTuturu from "./DeleteTuturu";
+import TuturuDialog from "./TuturuDialog";
 
 //MUI components
 import Card from "@material-ui/core/Card";
@@ -131,6 +132,7 @@ class Tuturu extends Component {
             <ChatIcon color="primary" />
           </MyButton>
           <span>{commentCount} Comments </span>
+          <TuturuDialog tuturuId={tuturuId} userHandle={tuturuUserHandle} />
         </CardContent>
       </Card>
     );

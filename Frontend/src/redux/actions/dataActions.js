@@ -8,6 +8,8 @@ import {
   SET_ERRORS,
   POST_TUTURU,
   CLEAR_ERRORS,
+  SET_TUTURU,
+  STOP_LOADING_UI,
 } from "../types";
 import axios from "axios";
 
@@ -18,7 +20,19 @@ export const getTuturus = () => async (dispatch) => {
     let res = await axios.get("/tuturus");
     dispatch({ type: SET_TUTURUS, payload: res.data });
   } catch (err) {
+    console.log(err);
     dispatch({ type: SET_TUTURUS, payload: [] });
+  }
+};
+
+export const getTuturu = (tuturuId) => async (dispatch) => {
+  dispatch({ type: LOADING_UI });
+  try {
+    let res = await axios.get(`/tuturu/${tuturuId}`);
+    dispatch({ type: SET_TUTURU, payload: res.data });
+    dispatch({ type: STOP_LOADING_UI });
+  } catch (err) {
+    console.log(err);
   }
 };
 

@@ -1,5 +1,6 @@
 import {
   SET_TUTURUS,
+  SET_TUTURU,
   LIKE_TUTURU,
   UNLIKE_TUTURU,
   LOADING_DATA,
@@ -28,6 +29,11 @@ export default function (state = initialState, action) {
         tuturus: action.payload,
         loading: false,
       };
+    case SET_TUTURU:
+      return {
+        ...state,
+        tuturu: action.payload,
+      };
     case LIKE_TUTURU:
     case UNLIKE_TUTURU:
       index = state.tuturus.findIndex((tuturu) => tuturu.tuturuId === action.payload.tuturuId);
@@ -46,6 +52,7 @@ export default function (state = initialState, action) {
         ...state,
         tuturus: [action.payload, ...state.tuturus],
       };
+
     default:
       return state;
   }

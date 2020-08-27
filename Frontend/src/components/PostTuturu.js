@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 //Redux
 import { connect } from "react-redux";
-import { postTuturu } from "../redux/actions/dataActions";
+import { postTuturu, clearErrors } from "../redux/actions/dataActions";
 
 //MUI components
 import Button from "@material-ui/core/Button";
@@ -41,8 +41,7 @@ export class PostTuturu extends Component {
       });
     }
     if (!nextProps.UI.errors && !nextProps.UI.loading) {
-      this.setState({ body: "" });
-      this.handleClose();
+      this.setState({ body: "", open: false, errors: {} });
     }
   }
   handleOpen = () => {
@@ -50,6 +49,7 @@ export class PostTuturu extends Component {
   };
 
   handleClose = () => {
+    this.props.clearErrors();
     this.setState({ open: false, errors: {} });
   };
 
@@ -114,6 +114,7 @@ export class PostTuturu extends Component {
 
 PostTuturu.propTypes = {
   postTuturu: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   UI: PropTypes.object.isRequired,
 };
 
@@ -121,4 +122,6 @@ const mapStateToProps = (state) => ({
   UI: state.UI,
 });
 
-export default connect(mapStateToProps, { postTuturu })(withStyles(styles)(PostTuturu));
+export default connect(mapStateToProps, { postTuturu, clearErrors })(
+  withStyles(styles)(PostTuturu)
+);
