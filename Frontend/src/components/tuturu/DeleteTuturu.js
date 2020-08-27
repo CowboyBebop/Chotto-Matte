@@ -6,14 +6,9 @@ import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
 //Other components
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 //MUI components
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -24,7 +19,7 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 
 //Redux
 import { connect } from "react-redux";
-import { deleteTuturu } from "../redux/actions/dataActions";
+import { deleteTuturu } from "../../redux/actions/dataActions";
 
 const styles = {
   deleteButton: {

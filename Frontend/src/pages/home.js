@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 //MUI Components
 import Grid from "@material-ui/core/Grid";
 
-import Tuturu from "../components/Tuturu";
-import Profile from "../components/Profile";
+import Tuturu from "../components/tuturu/Tuturu";
+import Profile from "../components/profile/Profile";
 
 import { connect } from "react-redux";
 import { getTuturus } from "../redux/actions/dataActions";

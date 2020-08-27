@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 //Redux
 import { connect } from "react-redux";
-import { getTuturu, clearErrors } from "../redux/actions/dataActions";
+import { getTuturu, clearErrors } from "../../redux/actions/dataActions";
 
 //MUI components
 import Button from "@material-ui/core/Button";
@@ -20,7 +20,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 //Custom Components
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
 
 //Icons

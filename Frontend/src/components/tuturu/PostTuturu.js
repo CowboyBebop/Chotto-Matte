@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 //Redux
 import { connect } from "react-redux";
-import { postTuturu, clearErrors } from "../redux/actions/dataActions";
+import { postTuturu, clearErrors } from "../../redux/actions/dataActions";
 
 //MUI components
 import Button from "@material-ui/core/Button";
@@ -15,7 +15,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 //Custom Components
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 //Icons
 import AddIcon from "@material-ui/icons/Add";

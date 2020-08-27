@@ -6,10 +6,10 @@ import PropTypes from "prop-types";
 
 //Redux
 import { connect } from "react-redux";
-import { likeTuturu, unlikeTuturu } from "../redux/actions/dataActions";
+import { likeTuturu, unlikeTuturu } from "../../redux/actions/dataActions";
 
 //Other components
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 
 //Icons
 import ChatIcon from "@material-ui/icons/Chat";

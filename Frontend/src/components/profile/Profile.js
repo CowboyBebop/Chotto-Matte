@@ -3,8 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import EditDetails from "../components/EditDetails";
-import MyButton from "../util/MyButton";
+
+//Custom components
+import EditDetails from "./EditDetails";
+import MyButton from "../../util/MyButton";
 
 //Icons
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -25,7 +27,7 @@ import Avatar from "@material-ui/core/Avatar";
 
 //Redux
 import { connect } from "react-redux";
-import { logoutUser, uploadImage } from "../redux/actions/userActions";
+import { logoutUser, uploadImage } from "../../redux/actions/userActions";
 
 import dayjs from "dayjs";
 

@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
 //Custom components
-import MyButton from "../util/MyButton";
+import MyButton from "../../util/MyButton";
 import DeleteTuturu from "./DeleteTuturu";
 import TuturuDialog from "./TuturuDialog";
 import LikeButton from "./LikeButton";
@@ -24,7 +24,6 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
 //Redux
 import { connect } from "react-redux";
-import { likeTuturu, unlikeTuturu } from "../redux/actions/dataActions";
 
 //dayjs plugin
 var relativeTime = require("dayjs/plugin/relativeTime");

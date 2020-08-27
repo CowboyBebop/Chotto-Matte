@@ -11,8 +11,8 @@ import ToolBar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 
 //Custom Components
-import MyButton from "../util/MyButton";
-import PostTuturu from "./PostTuturu";
+import MyButton from "../../util/MyButton";
+import PostTuturu from "../tuturu/PostTuturu";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
