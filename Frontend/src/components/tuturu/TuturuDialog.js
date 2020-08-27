@@ -22,6 +22,7 @@ import Typography from "@material-ui/core/Typography";
 //Custom Components
 import MyButton from "../../util/MyButton";
 import LikeButton from "./LikeButton";
+import Comments from "./Comments";
 
 //Icons
 import AddIcon from "@material-ui/icons/Add";
@@ -30,16 +31,12 @@ import CloseIcon from "@material-ui/icons/Close";
 import ChatIcon from "@material-ui/icons/Chat";
 
 const styles = (theme) => ({
-  ...theme.postTuturu,
+  ...theme.TuturuStyle,
   profileImage: {
     maxWidth: 200,
     height: 200,
     borderRadius: "50%",
     objectFit: "cover",
-  },
-  invisibleSeparator: {
-    border: "none",
-    margin: 4,
   },
   dialogContent: {
     padding: 20,
@@ -77,7 +74,16 @@ class TuturuDialog extends Component {
   render() {
     const {
       classes,
-      tuturu: { tuturuId, body, createdAt, likeCount, commentCount, profileImageUrl, userHandle },
+      tuturu: {
+        tuturuId,
+        body,
+        createdAt,
+        likeCount,
+        commentCount,
+        profileImageUrl,
+        userHandle,
+        comments,
+      },
       UI: { loading },
     } = this.props;
 
@@ -107,6 +113,7 @@ class TuturuDialog extends Component {
           </MyButton>
           <span>{commentCount} Comments </span>
         </Grid>
+        <Comments comments={comments} />
       </Grid>
     );
 
@@ -119,6 +126,7 @@ class TuturuDialog extends Component {
           <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
             <CloseIcon />
           </MyButton>
+          <hr className={classes.visibleSeparator} />
           <DialogContent>{dialogMarkup}</DialogContent>
         </Dialog>
       </Fragment>

@@ -13,6 +13,18 @@ export default {
       contrastText: "#fff",
     },
   },
+  TuturuStyle: {
+    invisibleSeparator: {
+      width: "100%",
+      border: "none",
+      margin: 4,
+    },
+    visibleSeparator: {
+      width: "99%",
+      borderBottom: "1px solid rgba(0,0,0,0.1)",
+      marginBottom: 20,
+    },
+  },
 
   postTuturu: {
     submitButton: {
