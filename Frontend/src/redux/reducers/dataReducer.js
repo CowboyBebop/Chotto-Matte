@@ -38,6 +38,9 @@ export default function (state = initialState, action) {
     case UNLIKE_TUTURU:
       index = state.tuturus.findIndex((tuturu) => tuturu.tuturuId === action.payload.tuturuId);
       state.tuturus[index] = action.payload;
+      if (state.tuturu.tuturuId === action.payload.tuturuId) {
+        state.tuturu = action.payload;
+      }
       return {
         ...state,
       };

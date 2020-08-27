@@ -21,11 +21,13 @@ import Typography from "@material-ui/core/Typography";
 
 //Custom Components
 import MyButton from "../util/MyButton";
+import LikeButton from "./LikeButton";
 
 //Icons
 import AddIcon from "@material-ui/icons/Add";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import CloseIcon from "@material-ui/icons/Close";
+import ChatIcon from "@material-ui/icons/Chat";
 
 const styles = (theme) => ({
   ...theme.postTuturu,
@@ -48,6 +50,16 @@ const styles = (theme) => ({
   closeButton: {
     position: "absolute",
     left: "90%",
+    top: "8%",
+  },
+  expandButton: {
+    position: "absolute",
+    left: "90%",
+  },
+  spinnerDiv: {
+    textAlign: "center",
+    marginTop: 50,
+    marginBottom: 50,
   },
 });
 
@@ -70,7 +82,9 @@ class TuturuDialog extends Component {
     } = this.props;
 
     const dialogMarkup = loading ? (
-      <CircularProgress size={200} />
+      <div className={classes.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
     ) : (
       <Grid container spacing={2}>
         <Grid item sm={5}>
@@ -86,6 +100,12 @@ class TuturuDialog extends Component {
           </Typography>
           <hr className={classes.invisibleSeparator} />
           <Typography variant="body1">{body}</Typography>
+          <LikeButton tuturuId={tuturuId} />
+          <span>{likeCount} Likes</span>
+          <MyButton tip="comments">
+            <ChatIcon color="primary" />
+          </MyButton>
+          <span>{commentCount} Comments </span>
         </Grid>
       </Grid>
     );
@@ -96,7 +116,6 @@ class TuturuDialog extends Component {
           <UnfoldMoreIcon color="primary" />
         </MyButton>
         <Dialog open={this.state.open} onClose={this.handleClose} full fullWidth maxWidth="sm">
-          <DialogTitle>Tuturu</DialogTitle>
           <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
             <CloseIcon />
           </MyButton>

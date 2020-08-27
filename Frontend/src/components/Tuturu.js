@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
-//Other components
+//Custom components
 import MyButton from "../util/MyButton";
 import DeleteTuturu from "./DeleteTuturu";
 import TuturuDialog from "./TuturuDialog";
+import LikeButton from "./LikeButton";
 
 //MUI components
 import Card from "@material-ui/core/Card";
@@ -47,21 +48,6 @@ const styles = {
 };
 
 class Tuturu extends Component {
-  likedTuturu = () => {
-    if (
-      this.props.user.likes &&
-      this.props.user.likes.find((like) => like.tuturuId === this.props.tuturu.tuturuId)
-    )
-      return true;
-    else return false;
-  };
-
-  likeTuturu = () => {
-    this.props.likeTuturu(this.props.tuturu.tuturuId);
-  };
-  unlikeTuturu = () => {
-    this.props.unlikeTuturu(this.props.tuturu.tuturuId);
-  };
   render() {
     const {
       classes,
@@ -79,25 +65,6 @@ class Tuturu extends Component {
         credentials: { userHandle },
       },
     } = this.props;
-    const likeButton = !authenticated ? (
-      <MyButton tip="Like">
-        <Link to="login">
-          <FavoriteBorderIcon />
-        </Link>
-      </MyButton>
-    ) : this.likedTuturu() ? (
-      <MyButton tip="Unlike" onClick={this.unlikeTuturu}>
-        <Link to="login">
-          <FavoriteIcon />
-        </Link>
-      </MyButton>
-    ) : (
-      <MyButton tip="Like" onClick={this.likeTuturu}>
-        <Link to="login">
-          <FavoriteBorderIcon />
-        </Link>
-      </MyButton>
-    );
     const deleteButton =
       authenticated && tuturuUserHandle === userHandle ? (
         <DeleteTuturu tuturuId={tuturuId} />
@@ -126,7 +93,7 @@ class Tuturu extends Component {
           <Typography variant={"body1"} color={"textPrimary"}>
             {body}
           </Typography>
-          {likeButton}
+          <LikeButton tuturuId={tuturuId} />
           <span>{likeCount} Likes</span>
           <MyButton tip="comments">
             <ChatIcon color="primary" />
@@ -140,8 +107,6 @@ class Tuturu extends Component {
 }
 
 Tuturu.propTypes = {
-  likeTuturu: PropTypes.func.isRequired,
-  unlikeTuturu: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   tuturu: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
@@ -151,9 +116,4 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-const mapActionsToProps = {
-  likeTuturu,
-  unlikeTuturu,
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Tuturu));
+export default connect(mapStateToProps, null)(withStyles(styles)(Tuturu));
