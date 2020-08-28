@@ -99,6 +99,18 @@ export const postComment = (tuturuId, commentData) => async (dispatch) => {
     });
 };
 
+export const getUserData = (userHandle) => async (dispatch) => {
+  dispatch({ type: LOADING_UI });
+  try {
+    let res = await axios.get(`/user/${userHandle}`);
+    dispatch({ type: SET_TUTURUS, payload: res.data.tuturus });
+    dispatch({ type: STOP_LOADING_UI });
+  } catch (err) {
+    console.log(err);
+    dispatch({ type: SET_TUTURUS, payload: null });
+  }
+};
+
 export const clearErrors = () => (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
 };
