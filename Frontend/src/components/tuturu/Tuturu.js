@@ -95,7 +95,11 @@ class Tuturu extends Component {
             <ChatIcon color="primary" />
           </MyButton>
           <span>{commentCount} Comments </span>
-          <TuturuDialog tuturuId={tuturuId} userHandle={tuturuUserHandle} />
+          <TuturuDialog
+            tuturuId={tuturuId}
+            userHandle={tuturuUserHandle}
+            openDialog={this.props.openDialog}
+          />
         </CardContent>
       </Card>
     );
@@ -106,6 +110,7 @@ Tuturu.propTypes = {
   user: PropTypes.object.isRequired,
   tuturu: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  openDialog: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({

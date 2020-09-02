@@ -57,7 +57,7 @@ exports.createNotificationOnLike = functions
     try {
       let docData = await db.doc(`/tuturus/${snapshot.data().tuturuId}`).get();
 
-      if (docData.exists && doc.data().userHandle !== snapshot.data().userHandle) {
+      if (docData.exists && docData.data().userHandle !== snapshot.data().userHandle) {
         await db.doc(`/notifications/${snapshot.id}`).set({
           recipient: docData.data().userHandle,
           sender: snapshot.data().userHandle,

@@ -31,6 +31,8 @@ export const getTuturu = (tuturuId) => async (dispatch) => {
   try {
     let res = await axios.get(`/tuturu/${tuturuId}`);
     dispatch({ type: SET_TUTURU, payload: res.data });
+
+    console.log(res.data);
     dispatch({ type: STOP_LOADING_UI });
   } catch (err) {
     console.log(err);
@@ -100,11 +102,10 @@ export const postComment = (tuturuId, commentData) => async (dispatch) => {
 };
 
 export const getUserData = (userHandle) => async (dispatch) => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: LOADING_DATA });
   try {
     let res = await axios.get(`/user/${userHandle}`);
     dispatch({ type: SET_TUTURUS, payload: res.data.tuturus });
-    dispatch({ type: STOP_LOADING_UI });
   } catch (err) {
     console.log(err);
     dispatch({ type: SET_TUTURUS, payload: null });

@@ -61,18 +61,18 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const user = {
+  const loginUser = {
     email: req.body.email,
     password: req.body.password,
   };
 
-  const { valid, errors } = validateLoginData(user);
+  const { valid, errors } = validateLoginData(loginUser);
 
   if (!valid) return res.status(400).json(errors);
 
   firebase
     .auth()
-    .signInWithEmailAndPassword(user.email, user.password)
+    .signInWithEmailAndPassword(loginUser.email, loginUser.password)
     .then((data) => {
       return data.user.getIdToken();
     })
@@ -184,7 +184,7 @@ exports.getAuthenticatedUserData = (req, res) => {
       userData.notifications = [];
       data.forEach((doc) => {
         userData.notifications.push({
-          recipient: doc.data().reicipent,
+          recipient: doc.data().recipient,
           sender: doc.data().sender,
           createdAt: doc.data().createdAt,
           tuturuId: doc.data().tuturuId,

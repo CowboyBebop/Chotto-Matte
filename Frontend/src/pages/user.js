@@ -1,7 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Link } from "react-router-dom";
-import dayjs from "dayjs";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -10,9 +8,7 @@ import { connect } from "react-redux";
 import { getUserData } from "../redux/actions/dataActions";
 
 //MUI components
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 
 //Custom Components
 import Tuturu from "../components/tuturu/Tuturu";
@@ -51,9 +47,13 @@ const styles = (theme) => ({
 class user extends Component {
   state = {
     profile: null,
+    tuturuIdParam: null,
   };
   componentDidMount() {
     const userHandle = this.props.match.params.userHandle;
+    const tuturuId = this.props.match.params.tuturuId;
+
+    if (tuturuId) this.setState({ tuturuIdParam: tuturuId });
 
     this.props.getUserData(userHandle);
     axios
@@ -67,17 +67,24 @@ class user extends Component {
   }
   render() {
     const { tuturus, loading } = this.props.data;
+    const { tuturuIdParam } = this.state;
 
     const tuturusMarkup = loading ? (
       <p>Loading stuff</p>
     ) : tuturus === null ? (
       <p>No tuturus from this user</p>
-    ) : (
+    ) : !tuturuIdParam ? (
       tuturus.map((tuturu) => <Tuturu key={tuturu.tuturuId} tuturu={tuturu} />)
+    ) : (
+      tuturus.map((tuturu) => {
+        if (tuturu.tuturuId !== tuturuIdParam)
+          return <Tuturu key={tuturu.tuturuId} tuturu={tuturu} />;
+        else return <Tuturu key={tuturu.tuturuId} tuturu={tuturu} openDialog />;
+      })
     );
 
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={2}>
         <Grid item sm={8} xs={12}>
           {tuturusMarkup}
         </Grid>
@@ -95,7 +102,7 @@ class user extends Component {
 
 user.propTypes = {
   getUserData: PropTypes.func.isRequired,
-  UI: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

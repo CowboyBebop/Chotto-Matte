@@ -1,28 +1,18 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
-//Redux
-import { connect } from "react-redux";
-import { getTuturu, clearErrors } from "../../redux/actions/dataActions";
-
 //MUI components
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import MuiLink from "@material-ui/core/Link";
 
 //Icons
 import LocationOn from "@material-ui/icons/LocationOn";
-import EditIcon from "@material-ui/icons/Edit";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
-import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 
 const styles = (theme) => ({
   ...theme.TuturuStyle,
@@ -102,19 +92,8 @@ const StaticProfile = (props) => {
 };
 
 StaticProfile.propTypes = {
-  getTuturu: PropTypes.func.isRequired,
-  clearErrors: PropTypes.func.isRequired,
-  tuturuId: PropTypes.string.isRequired,
-  userHandle: PropTypes.string.isRequired,
-  tuturu: PropTypes.object.isRequired,
-  UI: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  tuturu: state.data.tuturu,
-  UI: state.UI,
-});
-
-export default connect(mapStateToProps, { getTuturu, clearErrors })(
-  withStyles(styles)(StaticProfile)
-);
+export default withStyles(styles)(StaticProfile);
