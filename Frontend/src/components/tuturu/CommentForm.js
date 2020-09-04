@@ -62,16 +62,16 @@ class CommentForm extends Component {
       [event.target.name]: event.target.value,
     });
   };
-  handleSubmit = (event) => {
+  handleSubmit = (tuturuId, event) => {
     event.preventDefault();
-    this.props.postComment(this.props.tuturuId, { body: this.state.body });
+    this.props.postComment(tuturuId, { body: this.state.body });
   };
   render() {
     const { classes, authenticated, tuturuId } = this.props;
     const errors = this.state.errors;
     const commentFormMarkup = authenticated ? (
       <Grid item sm={12} style={{ textAlign: "center" }}>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit(tuturuId)}>
           <TextField
             name="body"
             type="text"
