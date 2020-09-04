@@ -21,6 +21,9 @@ import MyButton from "../../util/MyButton";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 
+//Audio
+import tuturuSound from "../../audio/tuturu.mp3";
+
 const styles = (theme) => ({
   ...theme.postTuturu,
   textField: {
@@ -63,6 +66,11 @@ export class PostTuturu extends Component {
     this.props.postTuturu({ body: this.state.body });
   };
 
+  playAudio = () => {
+    const audioEl = document.getElementsByClassName("audio-element")[0];
+    audioEl.play();
+  };
+
   render() {
     const { errors } = this.state;
     const {
@@ -74,7 +82,14 @@ export class PostTuturu extends Component {
         <MyButton onClick={this.handleOpen} tip="Post Tuturu">
           <AddIcon />
         </MyButton>
-        <Dialog open={this.state.open} onClose={this.handleClose} full fullWidth maxWidth="sm">
+        <Dialog
+          transitionDuration={{ exit: "2.5" }}
+          open={this.state.open}
+          onClose={this.handleClose}
+          full
+          fullWidth
+          maxWidth="sm"
+        >
           <DialogTitle>Post a new Tuturu</DialogTitle>
           <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
             <CloseIcon />
@@ -100,12 +115,16 @@ export class PostTuturu extends Component {
                 color="primary"
                 className={classes.submitButton}
                 disabled={loading}
+                onClick={this.playAudio}
               >
                 Submit{" "}
                 {loading && <CircularProgress size={30} className={classes.progressSpinner} />}
               </Button>
             </form>
           </DialogContent>
+          <audio className="audio-element">
+            <source src={tuturuSound} type="audio/mp3" />
+          </audio>
         </Dialog>
       </Fragment>
     );
