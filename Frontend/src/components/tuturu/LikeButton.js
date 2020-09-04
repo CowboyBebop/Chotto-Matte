@@ -33,14 +33,11 @@ const styles = {
 
 class LikeButton extends Component {
   likedTuturu = () => {
-    if (
+    return (
       this.props.user.likes &&
       this.props.user.likes.find((like) => like.tuturuId === this.props.tuturuId)
-    )
-      return true;
-    else return false;
+    );
   };
-
   likeTuturu = () => {
     this.props.likeTuturu(this.props.tuturuId);
   };
