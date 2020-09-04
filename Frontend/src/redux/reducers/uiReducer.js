@@ -5,7 +5,7 @@ const initialState = {
   errors: null,
 };
 
-export default function (action, state = initialState) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case SET_ERRORS:
       return {
