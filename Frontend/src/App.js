@@ -17,6 +17,7 @@ import { logoutUser, getUserData } from "./redux/actions/userActions";
 import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
+import user from "./pages/user.js";
 
 //MUI components
 import Navbar from "./components/layout/Navbar";
@@ -24,12 +25,13 @@ import AuthRoute from "./util/AuthRoute";
 
 const theme = createMuiTheme(themeObject);
 
+axios.defaults.baseURL = "https://europe-west3-chotto-matte.cloudfunctions.net/api/";
+
 const token = localStorage.FBIdToken;
 
 let authenticated;
 if (token) {
   const decodedToken = jwtDecode(token);
-  console.log(token);
   if (decodedToken.exp * 1000 < Date.now()) {
     store.dispatch(logoutUser());
     window.location.href = "/login";
@@ -52,6 +54,8 @@ class App extends Component {
                 <Route exact path="/" component={home} />
                 <AuthRoute exact path="/login" component={login} authenticated={authenticated} />
                 <AuthRoute exact path="/signup" component={signup} authenticated={authenticated} />
+                <Route exact path="/users/:userHandle/" component={user} />
+                <Route exact path="/users/:userHandle/tuturu/:tuturuId" component={user} />
               </Switch>
             </div>
           </Router>

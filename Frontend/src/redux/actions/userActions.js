@@ -5,6 +5,7 @@ import {
   LOADING_UI,
   LOADING_USER,
   CLEAR_ERRORS,
+  MARK_NOTIFICATIONS_READ,
 } from "../types";
 
 import axios from "axios";
@@ -59,6 +60,7 @@ export const getUserData = () => async (dispatch) => {
     dispatch({ type: LOADING_USER });
 
     let res = await axios.get("/user");
+    console.log(res.data);
     dispatch({ type: SET_USER, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -69,6 +71,11 @@ export const uploadImage = (formData) => async (dispatch) => {
   dispatch({ type: LOADING_USER });
   await axios.post("/user/image", formData).catch((err) => console.log(err));
   dispatch(getUserData());
+};
+
+export const markNotificationsRead = (notificationIds) => async (dispatch) => {
+  await axios.post(`/notifications`, notificationIds).catch((err) => console.log(err));
+  dispatch({ type: MARK_NOTIFICATIONS_READ });
 };
 
 const setAuthorizationHeader = (token) => {

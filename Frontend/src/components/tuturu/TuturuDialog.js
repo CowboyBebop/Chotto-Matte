@@ -59,13 +59,35 @@ const styles = (theme) => ({
 class TuturuDialog extends Component {
   state = {
     open: false,
+    oldPath: "",
+    newPath: "",
   };
+
+  componentDidMount() {
+    if (this.props.openDialog && !this.state.open) {
+      console.log("opened");
+      this.handleOpen();
+    }
+  }
+
   handleOpen = () => {
-    this.setState({ open: true });
+    let oldPath = window.location.pathname;
+
+    const { userHandle, tuturuId } = this.props;
+    const newPath = `/users/${userHandle}/tuturu/${tuturuId}`;
+
+    if (oldPath === newPath) oldPath = `/users/${userHandle}`;
+
+    window.history.pushState(null, null, newPath);
+
+    this.setState({ open: true, oldPath, newPath });
     this.props.getTuturu(this.props.tuturuId);
   };
   handleClose = () => {
+    window.history.pushState(null, null, this.state.oldPath);
+
     this.setState({ open: false });
+    this.props.clearErrors();
   };
   render() {
     const {
@@ -82,7 +104,6 @@ class TuturuDialog extends Component {
       },
       UI: { loading },
     } = this.props;
-
     const dialogMarkup = loading ? (
       <div className={classes.spinnerDiv}>
         <CircularProgress size={200} thickness={2} />

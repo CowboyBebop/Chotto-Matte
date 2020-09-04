@@ -13,10 +13,10 @@ import Button from "@material-ui/core/Button";
 //Custom Components
 import MyButton from "../../util/MyButton";
 import PostTuturu from "../tuturu/PostTuturu";
+import Notifications from "../layout/Notifications";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
-import Notifications from "@material-ui/icons/Notifications";
 
 class Navbar extends Component {
   render() {
@@ -33,9 +33,7 @@ class Navbar extends Component {
                 </MyButton>
               </Link>
 
-              <MyButton tip="Notifications">
-                <Notifications color="secondary" />
-              </MyButton>
+              <Notifications />
             </Fragment>
           ) : (
             <Fragment>

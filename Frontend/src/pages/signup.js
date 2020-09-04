@@ -48,7 +48,7 @@ class signup extends Component {
       userHandle: this.state.userHandle,
     };
 
-    this.props.signupUser(newUserData);
+    this.props.signupUser(newUserData, this.props.history);
   };
   handleChange = (event) => {
     this.setState({
@@ -97,7 +97,7 @@ class signup extends Component {
             <TextField
               id="confirmPassword"
               name="confirmPassword"
-              type="confirmPassword"
+              type="password"
               label="ConfirmPassword"
               className={classes.textField}
               helperText={errors.confirmPassword}
@@ -130,7 +130,7 @@ class signup extends Component {
               className={classes.button}
               disabled={loading}
             >
-              Login
+              Signup
               {loading && <CircularProgress size={30} className={classes.progress} />}
             </Button>
           </form>

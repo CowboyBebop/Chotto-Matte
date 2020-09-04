@@ -54,7 +54,6 @@ class CommentForm extends Component {
     }
     if (!nextProps.UI.errors && !nextProps.UI.loading) {
       this.setState({ body: "", open: false, errors: {} });
-      this.props.clearErrors();
     }
   }
 
@@ -67,7 +66,6 @@ class CommentForm extends Component {
     event.preventDefault();
     this.props.postComment(this.props.tuturuId, { body: this.state.body });
   };
-
   render() {
     const { classes, authenticated, tuturuId } = this.props;
     const errors = this.state.errors;

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 //Custom components
 import EditDetails from "./EditDetails";
 import MyButton from "../../util/MyButton";
+import ProfileSkeleton from "../../util/ProfileSkeleton";
 
 //Icons
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -123,7 +124,7 @@ class Profile extends Component {
         </Paper>
       )
     ) : (
-      <p>loading...</p>
+      <ProfileSkeleton />
     );
 
     return ProfileMarkup;

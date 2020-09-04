@@ -5,6 +5,7 @@ import {
   LOADING_USER,
   LIKE_TUTURU,
   UNLIKE_TUTURU,
+  MARK_NOTIFICATIONS_READ,
 } from "../types";
 
 const initialState = {
@@ -50,6 +51,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         likes: [...state.likes.filter((like) => like.tuturuId !== action.payload.tuturuId)],
+      };
+    case MARK_NOTIFICATIONS_READ:
+      state.notifications.forEach((notif) => (notif.read = true));
+      return {
+        ...state,
       };
     default:
       return state;
