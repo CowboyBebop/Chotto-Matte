@@ -17,7 +17,7 @@ const initialState = {
 
 let index;
 
-export default function (action, state = initialState) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case LOADING_DATA:
       return {
