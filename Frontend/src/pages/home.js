@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 
 import Tuturu from "../components/tuturu/Tuturu";
 import Profile from "../components/profile/Profile";
+import TuturuSkeleton from "../util/TuturuSkeleton";
 
 import { connect } from "react-redux";
 import { getTuturus } from "../redux/actions/dataActions";
@@ -20,7 +21,7 @@ class home extends Component {
     let recentTuturusMarkup = !loading ? (
       tuturus.map((tuturu) => <Tuturu key={tuturu.tuturuId} tuturu={tuturu} />)
     ) : (
-      <p>Loading...</p>
+      <TuturuSkeleton />
     );
     return (
       <Grid container spacing={2}>

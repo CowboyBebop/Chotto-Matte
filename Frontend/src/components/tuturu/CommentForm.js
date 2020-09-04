@@ -62,7 +62,10 @@ class CommentForm extends Component {
       [event.target.name]: event.target.value,
     });
   };
-
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.props.postComment(this.props.tuturuId, { body: this.state.body });
+  };
   render() {
     const { classes, authenticated, tuturuId } = this.props;
     const errors = this.state.errors;

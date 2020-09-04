@@ -13,6 +13,8 @@ import Grid from "@material-ui/core/Grid";
 //Custom Components
 import Tuturu from "../components/tuturu/Tuturu";
 import StaticProfile from "../components/profile/StaticProfile";
+import TuturuSkeleton from "../util/TuturuSkeleton";
+import ProfileSkeleton from "../util/ProfileSkeleton";
 
 const styles = (theme) => ({
   ...theme.TuturuStyle,
@@ -70,7 +72,7 @@ class user extends Component {
     const { tuturuIdParam } = this.state;
 
     const tuturusMarkup = loading ? (
-      <p>Loading stuff</p>
+      <TuturuSkeleton />
     ) : tuturus === null ? (
       <p>No tuturus from this user</p>
     ) : !tuturuIdParam ? (
@@ -90,7 +92,7 @@ class user extends Component {
         </Grid>
         <Grid item sm={4} xs={12}>
           {this.state.profile === null ? (
-            <p>Loading stuff</p>
+            <ProfileSkeleton />
           ) : (
             <StaticProfile profile={this.state.profile} />
           )}

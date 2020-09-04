@@ -41,24 +41,18 @@ export const getTuturu = (tuturuId) => async (dispatch) => {
 
 // Like a tuturu post
 export const likeTuturu = (tuturuId) => async (dispatch) => {
-  let res = await axios
-    .post(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}/like`)
-    .catch((err) => console.log(err));
+  let res = await axios.post(`/tuturu/${tuturuId}/like`).catch((err) => console.log(err));
   dispatch({ type: LIKE_TUTURU, payload: res.data });
 };
 
 // Unlike a tuturu post
 export const unlikeTuturu = (tuturuId) => async (dispatch) => {
-  let res = await axios
-    .post(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}/unlike`)
-    .catch((err) => console.log(err));
+  let res = await axios.post(`/tuturu/${tuturuId}/unlike`).catch((err) => console.log(err));
   dispatch({ type: UNLIKE_TUTURU, payload: res.data });
 };
 
 export const deleteTuturu = (tuturuId) => async (dispatch) => {
-  await axios
-    .delete(`https://europe-west3-chotto-matte.cloudfunctions.net/api/tuturu/${tuturuId}`)
-    .catch((err) => console.log(err));
+  await axios.delete(`/tuturu/${tuturuId}`).catch((err) => console.log(err));
   dispatch({ type: DELETE_TUTURU, payload: tuturuId });
 };
 

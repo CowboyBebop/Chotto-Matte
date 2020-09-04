@@ -74,7 +74,7 @@ export const uploadImage = (formData) => async (dispatch) => {
 };
 
 export const markNotificationsRead = (notificationIds) => async (dispatch) => {
-  let res = axios.post(`/notifications`, notificationIds).catch((err) => console.log(err));
+  await axios.post(`/notifications`, notificationIds).catch((err) => console.log(err));
   dispatch({ type: MARK_NOTIFICATIONS_READ });
 };
 

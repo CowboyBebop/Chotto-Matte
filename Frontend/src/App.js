@@ -25,6 +25,8 @@ import AuthRoute from "./util/AuthRoute";
 
 const theme = createMuiTheme(themeObject);
 
+axios.defaults.baseURL = "https://europe-west3-chotto-matte.cloudfunctions.net/api/";
+
 const token = localStorage.FBIdToken;
 
 let authenticated;
