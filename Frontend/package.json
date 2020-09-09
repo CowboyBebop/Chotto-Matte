@@ -2,12 +2,18 @@
   "name": "front-end",
   "version": "0.1.0",
   "private": true,
+  "devDependancies": {
+    "electron-builder": "^22.8.0",
+    "electron": "^10.1.1"
+  },
   "dependencies": {
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "concurrently": "^5.3.0",
     "dayjs": "^1.8.30",
+    "electron-is-dev": "^1.2.0",
     "jwt-decode": "^2.2.0",
     "material-ui": "^0.20.2",
     "react": "^16.13.1",
@@ -15,14 +21,21 @@
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "wait-on": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "electron-builder -c.extraMetadata.main=build/main.js",
+    "preelectron-pack": "npm run build"
   },
+  "main": "public/main.js",
+  "homepage": "./",
+  "author": "Captain Electron",
   "eslintConfig": {
     "extends": "react-app"
   },
