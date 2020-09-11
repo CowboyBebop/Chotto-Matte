@@ -29,6 +29,9 @@ const styles = {
     padding: 25,
     objectFit: "cover",
   },
+  TuturuPostCardIcon: {
+    padding: 7,
+  },
 };
 
 class LikeButton extends Component {
@@ -47,24 +50,29 @@ class LikeButton extends Component {
 
   render() {
     const {
+      classes,
       user: { authenticated },
     } = this.props;
 
     const likeButton = !authenticated ? (
       <Link to="login">
-        <MyButton tip="Like">
+        <MyButton btnClassName={classes.TuturuPostCardIcon} tip="Like">
           <FavoriteBorderIcon />
         </MyButton>
       </Link>
     ) : this.likedTuturu() ? (
       <Link to="login">
-        <MyButton tip="Unlike" onClick={this.unlikeTuturu}>
+        <MyButton
+          btnClassName={classes.TuturuPostCardIcon}
+          tip="Unlike"
+          onClick={this.unlikeTuturu}
+        >
           <FavoriteIcon />
         </MyButton>
       </Link>
     ) : (
       <Link to="login">
-        <MyButton tip="Like" onClick={this.likeTuturu}>
+        <MyButton btnClassName={classes.TuturuPostCardIcon} tip="Like" onClick={this.likeTuturu}>
           <FavoriteBorderIcon />
         </MyButton>
       </Link>
@@ -74,6 +82,7 @@ class LikeButton extends Component {
 }
 
 LikeButton.propTypes = {
+  classes: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   tuturuId: PropTypes.string.isRequired,
   likeTuturu: PropTypes.func.isRequired,

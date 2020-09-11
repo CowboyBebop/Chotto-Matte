@@ -62,7 +62,7 @@ class CommentForm extends Component {
       [event.target.name]: event.target.value,
     });
   };
-  handleSubmit = (tuturuId, event) => {
+  handleSubmit = (tuturuId) => (event) => {
     event.preventDefault();
     this.props.postComment(tuturuId, { body: this.state.body });
   };

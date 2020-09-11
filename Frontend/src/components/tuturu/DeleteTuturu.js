@@ -20,9 +20,8 @@ import { deleteTuturu } from "../../redux/actions/dataActions";
 
 const styles = {
   deleteButton: {
-    position: "absolute",
-    left: "92.5%",
-    top: "5%",
+    margin: 0,
+    padding: 0,
   },
 };
 
