@@ -144,7 +144,7 @@ class Tuturu extends Component {
         </Grid>
         <Grid item sm={7}>
           <Typography component={Link} color="primary" variant="h5" to={`/users/${userHandle}`}>
-            @{userHandle}
+            @{tuturuUserHandle}
           </Typography>
           <hr className={classes.invisibleSeparator} />
           <Typography variant="body2" color="textSecondary">
